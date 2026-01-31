@@ -1,0 +1,38 @@
+name: DB Migration & Prisma Generate
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Apply DB migration (PowerShell script)
+        if: env.DATABASE_URL != ''
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        shell: pwsh
+        run: |
+          cd packages/db
+          pwsh ./scripts/apply_migration.ps1
+
+      - name: Generate Prisma client
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma generate --schema=packages/db/prisma/schema.prisma

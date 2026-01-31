@@ -484,3 +484,25 @@ model WebhookDelivery {
   @@index([status])
   @@index([created_at])
 }
+
+// ============ Price Predictions ============
+
+model PricePrediction {
+  id String @id @default(cuid())
+
+  property_id String
+  property Property @relation(fields: [property_id], references: [id], onDelete: Cascade)
+
+  model_version String?
+  predicted_price Int?
+  confidence Float?
+  features Json?
+
+  predicted_at DateTime @default(now())
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([property_id])
+  @@index([predicted_at])
+}

@@ -18,6 +18,7 @@ export class AdminService {
     @InjectQueue('reports') private reportsQueue: Queue,
     @InjectQueue('cleanup') private cleanupQueue: Queue,
     @InjectQueue('webhooks') private webhooksQueue: Queue
+    ,@InjectQueue('ml-predict') private mlPredictQueue: Queue
   ) {}
 
   async getMetrics() {
@@ -101,9 +102,21 @@ export class AdminService {
       index: await this.getQueueInfo(this.indexQueue),
       reports: await this.getQueueInfo(this.reportsQueue),
       cleanup: await this.getQueueInfo(this.cleanupQueue),
+      webhooks: await this.getQueueInfo(this.webhooksQueue),
+      'ml-predict': await this.getQueueInfo(this.mlPredictQueue),
     };
 
     return queues;
+  }
+
+  async triggerMlPredict(propertyIds?: string[]) {
+    const job = await this.mlPredictQueue.add(
+      'batch',
+      { propertyIds },
+      { attempts: 1 }
+    );
+
+    return { jobId: job.id, status: 'queued' };
   }
 
   async testConnector(connectorName: string) {

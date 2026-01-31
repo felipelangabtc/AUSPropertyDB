@@ -18,6 +18,11 @@ export const webhookQueue = new Queue(
   process.env.REDIS_URL || 'redis://localhost:6379'
 );
 
+export const mlPredictQueue = new Queue(
+  'ml-predict',
+  process.env.REDIS_URL || 'redis://localhost:6379'
+);
+
 // Setup error handlers for all queues
 const allQueues = [
   crawlQueue,
@@ -27,6 +32,7 @@ const allQueues = [
   indexQueue,
   alertQueue,
   webhookQueue,
+  mlPredictQueue,
   reportQueue,
   cleanupQueue,
 ];

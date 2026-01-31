@@ -13,7 +13,9 @@ import { AdminController } from './admin.controller';
       { name: 'alerts' },
       { name: 'index' },
       { name: 'reports' },
-      { name: 'cleanup' }
+      { name: 'cleanup' },
+      { name: 'webhooks' },
+      { name: 'ml-predict' }
     ),
   ],
   controllers: [AdminController],

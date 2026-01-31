@@ -28,6 +28,12 @@ export class AdminController {
     return this.adminService.testConnector(connectorName);
   }
 
+  @Post('ml/predict')
+  @ApiOperation({ summary: 'Trigger ML batch predictions' })
+  async triggerMlPredict(@Body('propertyIds') propertyIds?: string[]) {
+    return this.adminService.triggerMlPredict(propertyIds);
+  }
+
   @Get('audit-log')
   @ApiOperation({ summary: 'Get audit log' })
   async getAuditLog(skip = 0, take = 50) {

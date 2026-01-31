@@ -20,7 +20,7 @@ import {
   reportQueue,
   cleanupQueue,
 } from './queues';
-import { webhookQueue } from './queues';
+import { webhookQueue, mlPredictQueue } from './queues';
 import axios from 'axios';
 import * as crypto from 'crypto';
 
@@ -75,10 +75,14 @@ async function bootstrap() {
           let enriched = listing;
           if (typeof connector.fetchListingDetails === 'function') {
             try {
-              const details = await connector.fetchListingDetails(listing.sourceId || listing.sourceId);
+              const details = await connector.fetchListingDetails(
+                listing.sourceId || listing.sourceId
+              );
               if (details) enriched = { ...listing, ...details };
             } catch (err) {
-              logger.warn(`[CRAWL] fetchListingDetails failed for ${listing.sourceId}: ${err.message}`);
+              logger.warn(
+                `[CRAWL] fetchListingDetails failed for ${listing.sourceId}: ${err.message}`
+              );
             }
           }
 
@@ -499,6 +503,73 @@ async function bootstrap() {
     }
   });
 
+  // ML batch prediction processor
+  mlPredictQueue.process(5, async (job) => {
+    logger.info(`[ML] Running batch prediction job id=${job.id}`);
+
+    try {
+      const { propertyIds } = job.data || {};
+
+      let properties = [];
+      if (Array.isArray(propertyIds) && propertyIds.length > 0) {
+        properties = await prisma.property.findMany({ where: { id: { in: propertyIds } } });
+      } else {
+        properties = await prisma.property.findMany({ where: { isActive: true }, take: 200 });
+      }
+
+      logger.info(`[ML] Preparing predictions for ${properties.length} properties`);
+
+      for (const property of properties) {
+        try {
+          const lastPrice = await prisma.priceHistory.findFirst({
+            where: { property_id: property.id },
+            orderBy: { captured_at: 'desc' },
+          });
+
+          const payload = {
+            property: {
+              id: property.id,
+              bedrooms: property.bedrooms,
+              bathrooms: property.bathrooms,
+              property_type: property.property_type,
+              land_size_m2: property.land_size_m2,
+              building_size_m2: property.building_size_m2,
+              suburb: property.suburb,
+              postcode: property.postcode,
+              lat: property.lat,
+              lng: property.lng,
+            },
+            last_price: lastPrice?.price || null,
+          };
+
+          const mlUrl = `${process.env.ML_SERVICE_URL || 'http://ml:8000'}/predict`;
+          const res = await axios.post(mlUrl, payload, { timeout: 15000 });
+
+          const predicted = res.data || {};
+
+          await prisma.pricePrediction.create({
+            data: {
+              id: nanoid(),
+              property_id: property.id,
+              model_version: predicted.model_version || 'v1',
+              predicted_price: predicted.price ? Math.round(predicted.price) : null,
+              confidence: predicted.confidence ?? null,
+              features: predicted.features ?? {},
+              predicted_at: predicted.predicted_at ? new Date(predicted.predicted_at) : new Date(),
+            },
+          });
+        } catch (err) {
+          logger.error(`[ML] Prediction failed for property ${property.id}: ${err.message}`);
+        }
+      }
+
+      return { predicted: properties.length };
+    } catch (error) {
+      logger.error(`[ML] Batch prediction error: ${error.message}`);
+      throw error;
+    }
+  });
+
   // Setup recurring jobs
   // Crawl every 6 hours
   await crawlQueue.add({ sourceName: 'demo-json' }, { repeat: { cron: '0 */6 * * *' } });
@@ -511,6 +582,9 @@ async function bootstrap() {
 
   // Update indexes every hour
   await indexQueue.add({}, { repeat: { cron: '0 * * * *' } });
+
+  // Run ML batch predictions daily at 02:00
+  await mlPredictQueue.add({}, { repeat: { cron: '0 2 * * *' } });
 
   logger.info('✅ All job processors configured');
   logger.info('Worker processes ready. Listening for jobs...');
