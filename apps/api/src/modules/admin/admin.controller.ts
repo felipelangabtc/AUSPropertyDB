@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Body, UseGuards, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { JwtGuard } from '../../common/guards/jwt.guard';
@@ -62,6 +62,12 @@ export class AdminController {
   @ApiOperation({ summary: 'List webhook deliveries' })
   async listWebhooks(skip = 0, take = 50) {
     return this.adminService.listWebhookDeliveries(take, skip);
+  }
+
+  @Get('ml/predictions')
+  @ApiOperation({ summary: 'List ML price predictions' })
+  async listPredictions(@Query('propertyId') propertyId?: string, @Query('skip') skip = 0, @Query('take') take = 50) {
+    return this.adminService.listPricePredictions(propertyId, take, skip);
   }
 
   @Post('webhooks/:id/retry')

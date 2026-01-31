@@ -214,6 +214,28 @@ export class AdminService {
     return { message: 'Merge rejected' };
   }
 
+  async listPricePredictions(propertyId?: string, limit = 50, offset = 0) {
+    const where = propertyId ? { property_id: propertyId } : {};
+    const data = await this.prisma.pricePrediction.findMany({
+      where,
+      skip: offset,
+      take: limit,
+      orderBy: { predicted_at: 'desc' },
+    });
+
+    const total = await this.prisma.pricePrediction.count({ where });
+
+    return {
+      data,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + limit < total,
+      },
+    };
+  }
+
   private async getQueueInfo(queue: Queue) {
     const counts = await queue.getJobCounts();
     const failed = await queue.getFailed(0, 10);
