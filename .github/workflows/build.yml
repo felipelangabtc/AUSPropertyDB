@@ -1,0 +1,43 @@
+name: Build Docker Images
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build API image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/api/Dockerfile
+          tags: aus-prop-api:latest
+          push: false
+
+      - name: Build Workers image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/workers/Dockerfile
+          tags: aus-prop-workers:latest
+          push: false
+
+      - name: Build Web image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/web/Dockerfile
+          tags: aus-prop-web:latest
+          push: false

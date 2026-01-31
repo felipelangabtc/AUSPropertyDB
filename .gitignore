@@ -1,31 +1,90 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# Dependencies
-node_modules
-.pnp
-.pnp.js
-
-# Local env files
+# Environment
 .env
 .env.local
+.env.*.local
+.env.prod
 .env.development.local
 .env.test.local
 .env.production.local
+!.env.example
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.pnpm-store/
+.pnpm-debug.log
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.turbo/
+
+# IDE & Editor
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.code-workspace
 
 # Testing
-coverage
+coverage/
+.nyc_output/
+*.lcov
 
-# Turbo
-.turbo
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Docker
+docker-compose.override.yml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+prisma/.env
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+.cache/
+
+# OS
+.AppleDouble
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+._*
+
+# File uploads
+public/uploads/
+uploads/
+files/
 
 # Vercel
 .vercel
 
-# Build Outputs
-.next/
-out/
-build
-dist
+# Misc
+.turbo/
+.netlify/
+dist-ssr/
+
 
 
 # Debug

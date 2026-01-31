@@ -1,0 +1,35 @@
+{
+  "name": "@aus-prop/db",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "prisma"
+  ],
+  "scripts": {
+    "db:push": "prisma db push",
+    "db:pull": "prisma db pull",
+    "migrate:create": "prisma migrate dev",
+    "migrate:prod": "prisma migrate deploy",
+    "migrate:reset": "prisma migrate reset --force",
+    "seed": "node dist/seed.js",
+    "reset": "npm run migrate:reset && npm run seed",
+    "prisma:studio": "prisma studio",
+    "prisma:generate": "prisma generate",
+    "build": "tsc",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.8.0",
+    "@aus-prop/shared": "*",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "prisma": "^5.8.0",
+    "typescript": "^5.3.3"
+  }
+}

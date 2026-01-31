@@ -1,0 +1,72 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "API Server",
+      "program": "${workspaceFolder}/apps/api/src/main.ts",
+      "preLaunchTask": "build:api",
+      "outFiles": ["${workspaceFolder}/apps/api/dist/**/*.js"],
+      "cwd": "${workspaceFolder}/apps/api",
+      "env": {
+        "NODE_ENV": "development",
+        "DEBUG": "app:*"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Workers",
+      "program": "${workspaceFolder}/apps/workers/src/main.ts",
+      "preLaunchTask": "build:workers",
+      "outFiles": ["${workspaceFolder}/apps/workers/dist/**/*.js"],
+      "cwd": "${workspaceFolder}/apps/workers",
+      "env": {
+        "NODE_ENV": "development",
+        "DEBUG": "app:*"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Web App",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/apps/web",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./~/*": "${webRoot}/node_modules/*",
+        "webpack:///./*": "${webRoot}/*"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Tests",
+      "program": "${workspaceFolder}/node_modules/.bin/jest",
+      "args": ["--runInBand", "--testPathPattern=${relativeFile}"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Seed Database",
+      "program": "${workspaceFolder}/packages/db/src/seed.ts",
+      "cwd": "${workspaceFolder}/packages/db",
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack",
+      "configurations": ["API Server", "Workers", "Web App"]
+    },
+    {
+      "name": "Backend",
+      "configurations": ["API Server", "Workers"]
+    }
+  ]
+}

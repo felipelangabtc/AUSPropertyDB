@@ -1,0 +1,105 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: aus-prop-db-postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aus_property_db
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aus-prop-network
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: aus-prop-db-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aus-prop-network
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: aus-prop-db-api
+    ports:
+      - '3001:3001'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/aus_property_db
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: dev-secret-key
+      API_PORT: 3001
+    volumes:
+      - ./apps/api/src:/app/src
+    networks:
+      - aus-prop-network
+
+  workers:
+    build:
+      context: .
+      dockerfile: apps/workers/Dockerfile
+    container_name: aus-prop-db-workers
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/aus_property_db
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./apps/workers/src:/app/src
+    networks:
+      - aus-prop-network
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: aus-prop-db-web
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_URL: http://api:3001
+      NEXT_PUBLIC_MAPBOX_TOKEN: ${MAPBOX_API_KEY}
+    volumes:
+      - ./apps/web/src:/app/src
+    networks:
+      - aus-prop-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  aus-prop-network:
+    driver: bridge

@@ -1,0 +1,466 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ Properties ============
+
+model Property {
+  id String @id @default(cuid())
+
+  // Address
+  canonical_address String @unique
+  address_fingerprint String @unique // hash for deduplication
+  lat Float
+  lng Float
+
+  // Location info
+  suburb String
+  postcode String
+  state String @default("NSW")
+  country String @default("AU")
+  lga String?
+  sa1 String? // Small Area Level 1
+  sa2 String? // Small Area Level 2
+  sa3 String? // Small Area Level 3
+  sa4 String? // Small Area Level 4
+
+  // Property details
+  property_type String // house, apartment, townhouse, land, etc.
+  bedrooms Int?
+  bathrooms Int?
+  parking_spaces Int?
+  land_size_m2 Float?
+  building_size_m2 Float?
+  year_built Int?
+
+  // Scores and enrichment
+  convenience_score Float @default(50)
+  last_enriched_at DateTime?
+
+  // Relations
+  listings Listing[]
+  watchlists Watchlist[]
+  alerts Alert[]
+  price_history PriceHistory[]
+  nearby_poi PropertyPOI[]
+  merge_reviews_source MergeReview[] @relation("SourceProperty")
+  merge_reviews_target MergeReview[] @relation("TargetProperty")
+
+  // Audit
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([suburb])
+  @@index([postcode])
+  @@index([state])
+  @@index([lat, lng]) // spatial index for geo queries
+  @@index([created_at])
+  @@fulltext([canonical_address, suburb]) // for full-text search
+}
+
+// ============ Listings ============
+
+model Listing {
+  id String @id @default(cuid())
+
+  // Foreign keys
+  property_id String
+  property Property @relation(fields: [property_id], references: [id], onDelete: Cascade)
+  source_id String
+  source Source @relation(fields: [source_id], references: [id], onDelete: Cascade)
+
+  // Source details
+  source_listing_id String // ID in the original source
+  url String @unique
+  first_seen_at DateTime @default(now())
+  last_seen_at DateTime @updatedAt
+  listed_at DateTime @default(now())
+
+  // Status and info
+  status String @default("active") // active, under_offer, sold, removed, etc.
+  agent_name String?
+  agency_name String?
+
+  // Content
+  title String
+  description String?
+
+  // Price
+  price_display String?
+  price_numeric_min Int?
+  price_numeric_max Int?
+  currency String @default("AUD")
+
+  // Relations
+  events ListingEvent[]
+  price_history PriceHistory[]
+
+  // Audit
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([source_id, source_listing_id]) // composite key
+  @@index([property_id])
+  @@index([source_id])
+  @@index([status])
+  @@index([listed_at])
+  @@index([last_seen_at])
+}
+
+// ============ Listing Events ============
+
+model ListingEvent {
+  id String @id @default(cuid())
+
+  listing_id String
+  listing Listing @relation(fields: [listing_id], references: [id], onDelete: Cascade)
+
+  event_type String // listed, price_changed, status_changed, delisted, relisted
+  old_value String?
+  new_value String?
+  metadata Json?
+
+  occurred_at DateTime @default(now())
+
+  @@index([listing_id])
+  @@index([event_type])
+  @@index([occurred_at])
+}
+
+// ============ Price History ============
+
+model PriceHistory {
+  id String @id @default(cuid())
+
+  listing_id String
+  listing Listing @relation(fields: [listing_id], references: [id], onDelete: Cascade)
+
+  property_id String
+  property Property @relation(fields: [property_id], references: [id], onDelete: Cascade)
+
+  price Int
+  currency String @default("AUD")
+
+  captured_at DateTime @default(now())
+
+  @@index([listing_id])
+  @@index([property_id])
+  @@index([captured_at])
+}
+
+// ============ Sources ============
+
+model Source {
+  id String @id @default(cuid())
+
+  name String @unique
+  domain String
+  method String // api, scrape, feed, manual
+  is_active Boolean @default(true)
+
+  rate_limit_requests_per_hour Int?
+  robots_txt_checked_at DateTime?
+  tos_notes String?
+  requires_auth Boolean @default(false)
+  auth_required_date DateTime?
+
+  // Relations
+  listings Listing[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([is_active])
+}
+
+// ============ POI (Points of Interest) ============
+
+model POI {
+  id String @id @default(cuid())
+
+  name String
+  category String // school, transport, shopping, hospital, beach, etc.
+  lat Float
+  lng Float
+
+  address String?
+  phone String?
+  website String?
+  metadata Json?
+
+  // Relations
+  property_distances PropertyPOI[]
+
+  created_at DateTime @default(now())
+
+  @@index([category])
+  @@index([lat, lng])
+}
+
+// ============ Property-POI Distances ============
+
+model PropertyPOI {
+  id String @id @default(cuid())
+
+  property_id String
+  property Property @relation(fields: [property_id], references: [id], onDelete: Cascade)
+
+  poi_id String
+  poi POI @relation(fields: [poi_id], references: [id], onDelete: Cascade)
+
+  distance_meters Float
+  duration_drive_seconds Int?
+  duration_walk_seconds Int?
+  duration_transit_seconds Int?
+
+  computed_at DateTime @default(now())
+
+  @@unique([property_id, poi_id])
+  @@index([property_id])
+  @@index([poi_id])
+}
+
+// ============ Users ============
+
+model User {
+  id String @id @default(cuid())
+
+  email String @unique
+  name String?
+  role String @default("user") // user, analyst, admin
+  plan String @default("free") // free, pro, enterprise
+
+  // Auth
+  password_hash String?
+  magic_link_token String? @unique
+  magic_link_expires_at DateTime?
+  oauth_provider String?
+  oauth_id String?
+
+  avatar_url String?
+  is_active Boolean @default(true)
+  email_verified Boolean @default(false)
+  email_verified_at DateTime?
+
+  last_login_at DateTime?
+
+  // Relations
+  watchlists Watchlist[]
+  saved_searches SavedSearch[]
+  alerts Alert[]
+  audit_logs AuditLog[]
+  merge_reviews MergeReview[]
+  sessions Session[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([email])
+  @@index([plan])
+  @@index([is_active])
+}
+
+// ============ Sessions ============
+
+model Session {
+  id String @id @default(cuid())
+
+  user_id String
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  token String @unique
+  expires_at DateTime
+
+  ip_address String?
+  user_agent String?
+
+  created_at DateTime @default(now())
+
+  @@index([user_id])
+  @@index([expires_at])
+}
+
+// ============ Watchlist ============
+
+model Watchlist {
+  id String @id @default(cuid())
+
+  user_id String
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  property_id String
+  property Property @relation(fields: [property_id], references: [id], onDelete: Cascade)
+
+  notes String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, property_id])
+  @@index([user_id])
+  @@index([property_id])
+}
+
+// ============ Saved Searches ============
+
+model SavedSearch {
+  id String @id @default(cuid())
+
+  user_id String
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  name String
+  filters Json // stores search parameters
+  notify_on_changes Boolean @default(true)
+
+  // Relations
+  alerts Alert[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([user_id])
+}
+
+// ============ Alerts ============
+
+model Alert {
+  id String @id @default(cuid())
+
+  user_id String
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  saved_search_id String?
+  saved_search SavedSearch? @relation(fields: [saved_search_id], references: [id], onDelete: SetNull)
+
+  property_id String?
+  property Property? @relation(fields: [property_id], references: [id], onDelete: SetNull)
+
+  type String // price_drop, new_listing, status_change, new_area
+  channel String // email, push, webhook
+  threshold_value Float?
+
+  is_active Boolean @default(true)
+  last_triggered_at DateTime?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([user_id])
+  @@index([is_active])
+}
+
+// ============ Notifications ============
+
+model Notification {
+  id String @id @default(cuid())
+
+  user_id String?
+  alert_id String?
+
+  type String
+  title String
+  message String
+  data Json?
+
+  read Boolean @default(false)
+  read_at DateTime?
+  sent_at DateTime @default(now())
+
+  created_at DateTime @default(now())
+
+  @@index([user_id])
+  @@index([alert_id])
+}
+
+// ============ Merge Reviews ============
+
+model MergeReview {
+  id String @id @default(cuid())
+
+  source_property_id String
+  source_property Property @relation("SourceProperty", fields: [source_property_id], references: [id], onDelete: Cascade)
+
+  target_property_id String
+  target_property Property @relation("TargetProperty", fields: [target_property_id], references: [id], onDelete: Cascade)
+
+  match_score Float // 0-1
+  status String @default("pending") // pending, approved, rejected, manual
+
+  reviewed_by String?
+  reviewed_user User? @relation(fields: [reviewed_by], references: [id], onDelete: SetNull)
+
+  notes String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([source_property_id, target_property_id])
+  @@index([status])
+  @@index([match_score])
+}
+
+// ============ Audit Logs ============
+
+model AuditLog {
+  id String @id @default(cuid())
+
+  user_id String?
+  user User? @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  action String // create, read, update, delete, export, admin_action, compliance_review
+  resource_type String // property, listing, user, alert, etc.
+  resource_id String
+
+  changes Json? // before/after values
+  ip_address String?
+  user_agent String?
+
+  timestamp DateTime @default(now())
+
+  @@index([user_id])
+  @@index([action])
+  @@index([resource_type])
+  @@index([timestamp])
+}
+
+// ============ Compliance & Legal ============
+
+model ComplianceLog {
+  id String @id @default(cuid())
+
+  source_id String?
+  action String // robots_txt_check, tos_review, takedown_request, data_purge
+  details Json?
+  status String @default("pending") // pending, completed, escalated
+  notes String?
+
+  logged_at DateTime @default(now())
+  completed_at DateTime?
+
+  @@index([source_id])
+  @@index([action])
+  @@index([status])
+}
+
+// ============ Data Retention ============
+
+model DataRetentionPolicy {
+  id String @id @default(cuid())
+
+  resource_type String @unique // listings, price_history, audit_logs, etc.
+  retention_days Int
+  auto_delete Boolean @default(true)
+  last_cleanup_at DateTime?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}

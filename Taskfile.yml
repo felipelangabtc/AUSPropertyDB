@@ -1,0 +1,42 @@
+version: '3'
+
+tasks:
+  build:
+    cmd: turbo run build
+    desc: Build all apps and packages
+
+  dev:
+    cmd: turbo run dev --parallel
+    desc: Start development for all apps
+
+  test:
+    cmd: turbo run test
+    desc: Run tests for all packages
+
+  lint:
+    cmd: turbo run lint
+    desc: Lint all packages
+
+  format:
+    cmd: prettier --write "**/*.{ts,tsx,json,md}"
+    desc: Format code with prettier
+
+  type-check:
+    cmd: turbo run type-check
+    desc: Type check all packages
+
+  db:setup:
+    cmd: cd packages/db && npm run migrate:prod && npm run seed
+    desc: Setup database with migrations and seed data
+
+  db:reset:
+    cmd: cd packages/db && npm run reset
+    desc: Reset database (drop and recreate)
+
+  docker:up:
+    cmd: docker-compose up -d
+    desc: Start Docker containers
+
+  docker:down:
+    cmd: docker-compose down
+    desc: Stop Docker containers

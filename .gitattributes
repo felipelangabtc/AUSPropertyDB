@@ -1,0 +1,66 @@
+# Auto detect text files and normalize line endings to LF
+* text=auto
+
+# Documents
+*.md text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.jsonc text eol=lf
+
+# Code files
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.prisma text eol=lf
+*.sql text eol=lf
+*.sh text eol=lf
+
+# Shell scripts
+*.bash text eol=lf
+*.zsh text eol=lf
+*.fish text eol=lf
+*.ps1 text eol=crlf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.gz binary
+*.zip binary
+*.7z binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+# Docker
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+
+# Git
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.gitconfig text eol=lf
+
+# Editor configs
+.editorconfig text eol=lf
+.prettierignore text eol=lf
+.prettierrc text eol=lf
+.eslintignore text eol=lf
+.eslintrc* text eol=lf
+
+# Lock files (treat as binary to prevent merge conflicts)
+package-lock.json binary
+pnpm-lock.yaml binary
+yarn.lock binary
+
+# Database
+*.prisma text eol=lf

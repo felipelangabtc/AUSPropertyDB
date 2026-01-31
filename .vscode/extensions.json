@@ -1,0 +1,21 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "Prisma.prisma",
+    "ms-azuretools.vscode-docker",
+    "eamodio.gitlens",
+    "GitHub.Copilot",
+    "GitHub.Copilot-Chat",
+    "ms-vscode.makefile-tools",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode.vscode-typescript-next",
+    "styled-components.vscode-styled-components",
+    "bradlc.vscode-tailwindcss",
+    "mhutchie.git-graph",
+    "johnsoncodehk.volar",
+    "astro-build.astro-vscode",
+    "svelte.svelte-vscode"
+  ]
+}
