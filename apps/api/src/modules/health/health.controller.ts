@@ -2,6 +2,7 @@ import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { HealthService } from './health.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { register } from 'prom-client';
 
 @ApiTags('health')
 @Controller()
@@ -40,5 +41,13 @@ export class HealthController {
     const result = await this.healthService.checkConnectors();
     const status = result.healthy ? HttpStatus.OK : HttpStatus.SERVICE_UNAVAILABLE;
     return res.status(status).json(result);
+  }
+
+  @Get('/metrics')
+  @ApiOperation({ summary: 'Prometheus metrics endpoint' })
+  @ApiResponse({ status: 200, description: 'Prometheus metrics in text format' })
+  async getMetrics(@Res() res: Response) {
+    res.set('Content-Type', register.contentType);
+    return res.end(await register.metrics());
   }
 }

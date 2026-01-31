@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { CacheModule } from '@nestjs/cache-manager';
@@ -13,6 +13,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { MlModule } from './modules/ml/ml.module';
 import { BullModule as BullModuleRegister } from '@nestjs/bull';
+import { HttpMetricsMiddleware } from './common/middleware/http-metrics.middleware';
 
 @Module({
   imports: [
@@ -51,4 +52,8 @@ import { BullModule as BullModuleRegister } from '@nestjs/bull';
     MlModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(HttpMetricsMiddleware).forRoutes('*');
+  }
+}
