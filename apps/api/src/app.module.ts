@@ -11,6 +11,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
+import { MlModule } from './modules/ml/ml.module';
 import { BullModule as BullModuleRegister } from '@nestjs/bull';
 
 @Module({
@@ -47,6 +48,7 @@ import { BullModule as BullModuleRegister } from '@nestjs/bull';
     SearchModule,
     AdminModule,
     WebhooksModule,
+    MlModule,
   ],
 })
 export class AppModule {}
