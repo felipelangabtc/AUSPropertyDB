@@ -28,6 +28,12 @@ export class AdminController {
     return this.adminService.testConnector(connectorName);
   }
 
+  @Post('ml/train')
+  @ApiOperation({ summary: 'Train ML model with recent property data' })
+  async trainMlModel(@Query('limit') limit = 1000) {
+    return this.adminService.trainMlModel(limit);
+  }
+
   @Post('ml/predict')
   @ApiOperation({ summary: 'Trigger ML batch predictions' })
   async triggerMlPredict(@Body('propertyIds') propertyIds?: string[]) {
@@ -66,7 +72,11 @@ export class AdminController {
 
   @Get('ml/predictions')
   @ApiOperation({ summary: 'List ML price predictions' })
-  async listPredictions(@Query('propertyId') propertyId?: string, @Query('skip') skip = 0, @Query('take') take = 50) {
+  async listPredictions(
+    @Query('propertyId') propertyId?: string,
+    @Query('skip') skip = 0,
+    @Query('take') take = 50
+  ) {
     return this.adminService.listPricePredictions(propertyId, take, skip);
   }
 

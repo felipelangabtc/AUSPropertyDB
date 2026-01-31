@@ -2,7 +2,10 @@ import { PrismaClient } from '@aus-prop/db';
 import axios from 'axios';
 import { nanoid } from 'nanoid';
 
-export async function processMlBatch(prisma: PrismaClient, options: { propertyIds?: string[]; mlServiceUrl?: string } = {}) {
+export async function processMlBatch(
+  prisma: PrismaClient,
+  options: { propertyIds?: string[]; mlServiceUrl?: string } = {}
+) {
   const { propertyIds, mlServiceUrl } = options;
 
   let properties = [];
@@ -22,18 +25,19 @@ export async function processMlBatch(prisma: PrismaClient, options: { propertyId
         orderBy: { captured_at: 'desc' },
       });
 
+      // Extract convenience score (placeholder for now)
+      const convenienceScore = Math.min(100, (property.listing_views || 0) / 100);
+
       const payload = {
         property: {
-          id: property.id,
-          bedrooms: property.bedrooms,
-          bathrooms: property.bathrooms,
-          property_type: property.property_type,
-          land_size_m2: property.land_size_m2,
-          building_size_m2: property.building_size_m2,
-          suburb: property.suburb,
-          postcode: property.postcode,
-          lat: property.lat,
-          lng: property.lng,
+          bedrooms: property.bedrooms || 2,
+          bathrooms: property.bathrooms || 1,
+          parkingSpaces: property.parking_spaces || 1,
+          landSizeM2: property.land_size_m2 || 500,
+          buildingSizeM2: property.building_size_m2 || 120,
+          lat: property.lat || -33.8688,
+          lng: property.lng || 151.2093,
+          convenienceScore: convenienceScore,
         },
         last_price: lastPrice?.price || null,
       };
@@ -47,8 +51,16 @@ export async function processMlBatch(prisma: PrismaClient, options: { propertyId
           property_id: property.id,
           model_version: predicted.model_version || 'v1',
           predicted_price: predicted.price ? Math.round(predicted.price) : null,
-          confidence: predicted.confidence ?? null,
-          features: predicted.features ?? {},
+          confidence: predicted.confidence ?? 0.3,
+          features: {
+            bedrooms: property.bedrooms,
+            bathrooms: property.bathrooms,
+            parking_spaces: property.parking_spaces,
+            land_size_m2: property.land_size_m2,
+            building_size_m2: property.building_size_m2,
+            lat: property.lat,
+            lng: property.lng,
+          },
           predicted_at: predicted.predicted_at ? new Date(predicted.predicted_at) : new Date(),
         },
       });

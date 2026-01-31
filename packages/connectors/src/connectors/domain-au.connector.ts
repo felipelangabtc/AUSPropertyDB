@@ -40,7 +40,11 @@ export class DomainAUConnector extends BaseSourceConnector {
       retryDelay: axiosRetry.exponentialDelay,
       retryCondition: (error) => {
         const status = error?.response?.status;
-        return axiosRetry.isNetworkOrIdempotentRequestError(error) || status === 429 || (status >= 500 && status < 600);
+        return (
+          axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+          status === 429 ||
+          (status >= 500 && status < 600)
+        );
       },
     });
   }
@@ -62,8 +66,18 @@ export class DomainAUConnector extends BaseSourceConnector {
 
     // Fallback scraping / simulated discovery when API key not present
     const fallback: DiscoveredListing[] = [
-      { sourceId: 'dom_demo_1', url: 'https://www.domain.com.au/property-demo-1', foundAt: new Date(), priority: 1 },
-      { sourceId: 'dom_demo_2', url: 'https://www.domain.com.au/property-demo-2', foundAt: new Date(), priority: 1 },
+      {
+        sourceId: 'dom_demo_1',
+        url: 'https://www.domain.com.au/property-demo-1',
+        foundAt: new Date(),
+        priority: 1,
+      },
+      {
+        sourceId: 'dom_demo_2',
+        url: 'https://www.domain.com.au/property-demo-2',
+        foundAt: new Date(),
+        priority: 1,
+      },
     ];
     this.logDiscovery(fallback.length);
     this.recordSuccess();

@@ -41,7 +41,11 @@ export class RealEstateAUConnector extends BaseSourceConnector {
       retryDelay: axiosRetry.exponentialDelay,
       retryCondition: (error) => {
         const status = error?.response?.status;
-        return axiosRetry.isNetworkOrIdempotentRequestError(error) || status === 429 || (status >= 500 && status < 600);
+        return (
+          axiosRetry.isNetworkOrIdempotentRequestError(error) ||
+          status === 429 ||
+          (status >= 500 && status < 600)
+        );
       },
     });
   }
@@ -147,11 +151,15 @@ export class RealEstateAUConnector extends BaseSourceConnector {
       bathrooms: listing.bathrooms || listing.bathroom || null,
       parking_spaces: listing.parkingSpaces || listing.parking_spaces || listing.carspaces || null,
       land_size_m2: listing.landSizeM2 || listing.land_size_m2 || listing.landSize || null,
-      building_size_m2: listing.buildingSizeM2 || listing.building_size_m2 || listing.buildingSize || null,
+      building_size_m2:
+        listing.buildingSizeM2 || listing.building_size_m2 || listing.buildingSize || null,
       status: listing.status || 'active',
       agent_name: listing.agentName || listing.agent?.name || null,
       agency_name: listing.agencyName || listing.agency?.name || null,
-      listed_at: listing.listedAt || listing.listed_at || listing.publishedAt ? new Date(listing.listedAt || listing.listed_at || listing.publishedAt) : new Date(),
+      listed_at:
+        listing.listedAt || listing.listed_at || listing.publishedAt
+          ? new Date(listing.listedAt || listing.listed_at || listing.publishedAt)
+          : new Date(),
     };
 
     const validated = await this.validateNormalizedListing(normalized);

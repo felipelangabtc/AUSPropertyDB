@@ -508,7 +508,10 @@ async function bootstrap() {
   mlPredictQueue.process(5, async (job) => {
     logger.info(`[ML] Running batch prediction job id=${job.id}`);
     const { propertyIds } = job.data || {};
-    const result = await processMlBatch(prisma as any, { propertyIds, mlServiceUrl: process.env.ML_SERVICE_URL });
+    const result = await processMlBatch(prisma as any, {
+      propertyIds,
+      mlServiceUrl: process.env.ML_SERVICE_URL,
+    });
     logger.info(`[ML] Batch prediction completed: ${JSON.stringify(result)}`);
     return result;
   });

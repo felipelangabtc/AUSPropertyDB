@@ -236,6 +236,74 @@ export class AdminService {
     };
   }
 
+  async trainMlModel(limit = 1000) {
+    /**
+     * Fetch recent properties with price history
+     * and trigger ML training job
+     */
+    const properties = await this.prisma.property.findMany({
+      where: { isActive: true },
+      take: limit,
+      include: {
+        listings: {
+          include: { priceHistory: { orderBy: { captured_at: 'desc' }, take: 1 } },
+        },
+      },
+    });
+
+    const trainingData = {
+      properties: properties
+        .filter((p) => p.listings.length > 0 && p.listings[0]?.priceHistory.length > 0)
+        .map((p) => ({
+          bedrooms: p.bedrooms || 2,
+          bathrooms: p.bathrooms || 1,
+          parkingSpaces: p.parking_spaces || 1,
+          landSizeM2: p.land_size_m2 || 500,
+          buildingSizeM2: p.building_size_m2 || 120,
+          lat: p.lat || -33.8688,
+          lng: p.lng || 151.2093,
+          convenienceScore: Math.min(100, (p.listing_views || 0) / 100),
+        })),
+      prices: properties
+        .filter((p) => p.listings.length > 0 && p.listings[0]?.priceHistory.length > 0)
+        .map((p) => p.listings[0]?.priceHistory[0]?.price || 0),
+    };
+
+    if (trainingData.properties.length === 0) {
+      return {
+        message: 'No training data available',
+        propertiesUsed: 0,
+      };
+    }
+
+    try {
+      const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://ml:8000';
+      const response = await fetch(`${mlServiceUrl}/train`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(trainingData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`ML training failed: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      this.logger.log(`ML model trained with ${trainingData.properties.length} properties`);
+      return {
+        message: 'ML model trained successfully',
+        propertiesUsed: trainingData.properties.length,
+        result,
+      };
+    } catch (err) {
+      this.logger.error(`ML training error: ${err}`);
+      return {
+        error: err instanceof Error ? err.message : 'Unknown error',
+        propertiesUsed: trainingData.properties.length,
+      };
+    }
+  }
+
   private async getQueueInfo(queue: Queue) {
     const counts = await queue.getJobCounts();
     const failed = await queue.getFailed(0, 10);
