@@ -36,34 +36,34 @@ export class RealEstateAUConnector extends BaseSourceConnector {
 
   async discoverListings(options?: DiscoverOptions): Promise<DiscoveredListing[]> {
     this.logger.info('Discovering listings from RealEstate.com.au', options);
-
-    // In production, this would:
-    // 1. Query the RealEstate API for listings
-    // 2. Paginate through results
-    // 3. Extract listing URLs and metadata
-
-    // For now, placeholder
+    // In production, this would call the RealEstate API or scrape pages.
+    // Here we provide a safe fallback: if API key exists, attempt an API call placeholder,
+    // otherwise return a small set of simulated discoveries for testing.
     if (!this.apiKey) {
-      this.logger.warn('No API key configured for RealEstate.com.au');
-      return [];
+      this.logger.warn('No API key configured for RealEstate.com.au - returning simulated discoveries');
+      const fallback: DiscoveredListing[] = [
+        {
+          sourceId: 'rea_demo_1',
+          url: 'https://www.realestate.com.au/property-demo-1',
+          foundAt: new Date(),
+          priority: 1,
+        },
+        {
+          sourceId: 'rea_demo_2',
+          url: 'https://www.realestate.com.au/property-demo-2',
+          foundAt: new Date(),
+          priority: 1,
+        },
+      ];
+      this.logDiscovery(fallback.length);
+      this.recordSuccess();
+      return fallback;
     }
 
     try {
-      // Example API call (adjust based on actual RealEstate API)
-      // const response = await this.client.get('/search', {
-      //   params: {
-      //     region: 'NSW',
-      //     propertyTypes: 'house,apartment',
-      //     limit: 100,
-      //   },
-      // });
-
-      // return response.data.listings.map((listing: any) => ({
-      //   sourceId: listing.id,
-      //   url: listing.url,
-      //   foundAt: new Date(),
-      // }));
-
+      // Placeholder for API call if key is provided. Real implementation depends on vendor API.
+      // const response = await this.client.get('/search', { params: { limit: 50 } });
+      // Map response into DiscoveredListing[]
       this.recordSuccess();
       return [];
     } catch (error) {

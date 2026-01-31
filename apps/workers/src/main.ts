@@ -39,7 +39,7 @@ async function bootstrap() {
   // Crawl job: discover and fetch listings from sources
   crawlQueue.process(20, async (job) => {
     logger.info(`[CRAWL] Processing source: ${job.data.sourceName}`);
-    const connector = getConnector(job.data.sourceName);
+    const connector = getConnector(job.data.sourceName, job.data.options || {});
     if (!connector) throw new Error(`Connector not found: ${job.data.sourceName}`);
 
     try {
