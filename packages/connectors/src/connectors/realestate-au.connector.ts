@@ -40,7 +40,9 @@ export class RealEstateAUConnector extends BaseSourceConnector {
     // Here we provide a safe fallback: if API key exists, attempt an API call placeholder,
     // otherwise return a small set of simulated discoveries for testing.
     if (!this.apiKey) {
-      this.logger.warn('No API key configured for RealEstate.com.au - returning simulated discoveries');
+      this.logger.warn(
+        'No API key configured for RealEstate.com.au - returning simulated discoveries'
+      );
       const fallback: DiscoveredListing[] = [
         {
           sourceId: 'rea_demo_1',
@@ -81,12 +83,26 @@ export class RealEstateAUConnector extends BaseSourceConnector {
       // const response = await this.client.get(`/listings/${sourceId}`);
       // const data = response.data;
 
+      // Fallback enriched structure for testing and mapping
       const enriched: EnrichedListingData = {
         sourceId,
         url: `https://www.realestate.com.au/property-${sourceId}`,
-        title: 'Property Title',
-        description: 'Property description',
-        // ... rest of fields
+        title: `Sample Property ${sourceId}`,
+        description: `Generated description for ${sourceId}`,
+        address: `123 Example Street, Sydney NSW 2000`,
+        price: Math.floor(500000 + Math.random() * 1500000),
+        priceDisplay: `$${Math.floor(500000 + Math.random() * 1500000).toLocaleString()}`,
+        bedrooms: 2,
+        bathrooms: 1,
+        parkingSpaces: 1,
+        landSizeM2: 80,
+        buildingSizeM2: 75,
+        yearBuilt: 2005,
+        status: 'active',
+        agentName: 'Demo Agent',
+        agencyName: 'Demo Agency',
+        listedAt: new Date().toISOString(),
+        images: [],
         rawData: {},
       };
 
