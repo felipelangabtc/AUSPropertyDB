@@ -70,14 +70,29 @@ async function bootstrap() {
 
       // Queue each listing for normalization
       for (const listing of listings) {
-        await normalizeQueue.add(
-          {
-            listing,
-            sourceId: source.id,
-            sourceName: job.data.sourceName,
-          },
-          { attempts: 3 }
-        );
+        try {
+          // Attempt to fetch full details for each discovered listing
+          let enriched = listing;
+          if (typeof connector.fetchListingDetails === 'function') {
+            try {
+              const details = await connector.fetchListingDetails(listing.sourceId || listing.sourceId);
+              if (details) enriched = { ...listing, ...details };
+            } catch (err) {
+              logger.warn(`[CRAWL] fetchListingDetails failed for ${listing.sourceId}: ${err.message}`);
+            }
+          }
+
+          await normalizeQueue.add(
+            {
+              listing: enriched,
+              sourceId: source.id,
+              sourceName: job.data.sourceName,
+            },
+            { attempts: 3 }
+          );
+        } catch (err) {
+          logger.error(`[CRAWL] Error queueing listing ${listing.sourceId}: ${err.message}`);
+        }
       }
 
       return { discovered: listings.length };
