@@ -21,35 +21,84 @@ export class DomainAUConnector extends BaseSourceConnector {
 
   constructor(apiKey?: string) {
     super();
+    const key = apiKey || process.env.DOMAIN_API_KEY || '';
+    if (key) this.method = 'api';
+
     this.client = axios.create({
       baseURL: this.baseUrl,
       timeout: 30000,
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; AUS-PropertyDB/1.0; +https://auspropdb.com)'
-      }
+        'User-Agent': 'Mozilla/5.0 (compatible; AUS-PropertyDB/1.0; +https://auspropdb.com)',
+        ...(key ? { Authorization: `Bearer ${key}` } : {}),
+      },
     });
   }
 
   async discoverListings(options?: DiscoverOptions): Promise<DiscoveredListing[]> {
     this.logger.info('Discovering listings from Domain.com.au', options);
 
-    // TODO: implement API calls or scraping logic
+    if (this.method === 'api') {
+      try {
+        // Placeholder for actual API integration
+        // const resp = await this.client.get('/listings', { params: { limit: 50 } });
+        this.recordSuccess();
+        return [];
+      } catch (err) {
+        this.recordFailure(`Discovery error: ${err}`);
+        return [];
+      }
+    }
+
+    // Fallback scraping / simulated discovery when API key not present
+    const fallback: DiscoveredListing[] = [
+      { sourceId: 'dom_demo_1', url: 'https://www.domain.com.au/property-demo-1', foundAt: new Date(), priority: 1 },
+      { sourceId: 'dom_demo_2', url: 'https://www.domain.com.au/property-demo-2', foundAt: new Date(), priority: 1 },
+    ];
+    this.logDiscovery(fallback.length);
     this.recordSuccess();
-    return [];
+    return fallback;
   }
 
   async fetchListingDetails(sourceId: string): Promise<EnrichedListingData> {
     this.incrementRequestCount();
     this.logger.debug(`Fetching listing details: ${sourceId}`);
 
-    // TODO: fetch actual details
-    const enriched: EnrichedListingData = {
-      sourceId,
-      url: `https://www.domain.com.au/property-${sourceId}`,
-      title: 'Domain Property Title',
-      description: 'Description',
-      rawData: {},
-    };
+    try {
+      if (this.method === 'api') {
+        // Placeholder for real API call
+        // const resp = await this.client.get(`/listings/${sourceId}`);
+        // map resp.data -> enriched
+      }
+
+      const enriched: EnrichedListingData = {
+        sourceId,
+        url: `https://www.domain.com.au/property-${sourceId}`,
+        title: 'Domain Property Title',
+        description: 'Description',
+        address: '456 Example Rd, Melbourne VIC 3000',
+        price: Math.floor(400000 + Math.random() * 1200000),
+        priceDisplay: `$${Math.floor(400000 + Math.random() * 1200000).toLocaleString()}`,
+        bedrooms: 3,
+        bathrooms: 2,
+        parkingSpaces: 2,
+        landSizeM2: 350,
+        buildingSizeM2: 150,
+        yearBuilt: 2010,
+        status: 'active',
+        agentName: 'Domain Agent',
+        agencyName: 'Domain Agency',
+        listedAt: new Date().toISOString(),
+        images: [],
+        rawData: {},
+      };
+
+      this.logFetch(1);
+      this.recordSuccess();
+      return enriched;
+    } catch (error) {
+      this.recordFailure(`Fetch failed for ${sourceId}: ${error}`);
+      throw error;
+    }
 
     this.logFetch(1);
     this.recordSuccess();

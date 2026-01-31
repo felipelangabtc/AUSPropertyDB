@@ -67,6 +67,7 @@ export class RealEstateAUConnector extends BaseSourceConnector {
       // const response = await this.client.get('/search', { params: { limit: 50 } });
       // Map response into DiscoveredListing[]
       this.recordSuccess();
+      // Example mapping when API is available would go here; return empty for now.
       return [];
     } catch (error) {
       this.recordFailure(`Discovery failed: ${error}`);
@@ -119,26 +120,26 @@ export class RealEstateAUConnector extends BaseSourceConnector {
     const listing = rawData as any;
 
     const normalized: NormalizedListing = {
-      sourceListingId: listing.id,
+      sourceListingId: listing.sourceId || listing.id || listing.source_listing_id,
       url: listing.url,
       source: this.name,
       title: listing.title,
       description: listing.description,
-      canonical_address: listing.address,
-      price_numeric_min: listing.price,
-      price_numeric_max: listing.price,
-      price_display: listing.priceDisplay,
+      canonical_address: listing.address || listing.canonical_address,
+      price_numeric_min: listing.price || listing.price_numeric_min || null,
+      price_numeric_max: listing.price || listing.price_numeric_max || null,
+      price_display: listing.priceDisplay || listing.price_display || null,
       currency: 'AUD',
-      property_type: listing.propertyType,
-      bedrooms: listing.bedrooms,
-      bathrooms: listing.bathrooms,
-      parking_spaces: listing.parking,
-      land_size_m2: listing.landArea,
-      building_size_m2: listing.buildingArea,
+      property_type: listing.propertyType || listing.property_type || listing.type,
+      bedrooms: listing.bedrooms || listing.bedroom || null,
+      bathrooms: listing.bathrooms || listing.bathroom || null,
+      parking_spaces: listing.parkingSpaces || listing.parking_spaces || listing.carspaces || null,
+      land_size_m2: listing.landSizeM2 || listing.land_size_m2 || listing.landSize || null,
+      building_size_m2: listing.buildingSizeM2 || listing.building_size_m2 || listing.buildingSize || null,
       status: listing.status || 'active',
-      agent_name: listing.agent?.name,
-      agency_name: listing.agency?.name,
-      listed_at: listing.listedDate ? new Date(listing.listedDate) : new Date(),
+      agent_name: listing.agentName || listing.agent?.name || null,
+      agency_name: listing.agencyName || listing.agency?.name || null,
+      listed_at: listing.listedAt || listing.listed_at || listing.publishedAt ? new Date(listing.listedAt || listing.listed_at || listing.publishedAt) : new Date(),
     };
 
     const validated = await this.validateNormalizedListing(normalized);
