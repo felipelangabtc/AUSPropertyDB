@@ -464,3 +464,23 @@ model DataRetentionPolicy {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+
+// ============ Webhook Deliveries ============
+
+model WebhookDelivery {
+  id String @id @default(cuid())
+
+  event String
+  payload Json
+  targetUrl String
+
+  status String @default("pending") // pending, delivered, failed
+  attempts Int @default(0)
+  last_attempt_at DateTime?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([status])
+  @@index([created_at])
+}

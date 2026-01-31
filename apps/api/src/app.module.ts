@@ -10,6 +10,8 @@ import { SearchModule } from './modules/search/search.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { WebhooksModule } from './modules/webhooks/webhooks.module';
+import { BullModule as BullModuleRegister } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -36,12 +38,15 @@ import { AdminModule } from './modules/admin/admin.module';
         port: parseInt(process.env.REDIS_PORT || '6379'),
       },
     }),
+    // Register queues used by the API (webhooks delivery)
+    BullModuleRegister.registerQueue({ name: 'webhooks' }),
     HealthModule,
     AuthModule,
     UserModule,
     PropertyModule,
     SearchModule,
     AdminModule,
+    WebhooksModule,
   ],
 })
 export class AppModule {}

@@ -20,6 +20,9 @@ import {
   reportQueue,
   cleanupQueue,
 } from './queues';
+import { webhookQueue } from './queues';
+import axios from 'axios';
+import * as crypto from 'crypto';
 
 const prisma = new PrismaClient();
 const transporter = nodemailer.createTransport({
@@ -415,6 +418,64 @@ async function bootstrap() {
       return { cleaned: true };
     } catch (error) {
       logger.error(`[CLEANUP] Error: ${error.message}`);
+      throw error;
+    }
+  });
+
+  // Webhook delivery processor
+  webhookQueue.process(10, async (job) => {
+    logger.info(`[WEBHOOK] Delivering webhook event=${job.data.event} to ${job.data.targetUrl}`);
+
+    const { event, payload, targetUrl } = job.data;
+
+    try {
+      // Create delivery record (audit)
+      const delivery = await prisma.webhookDelivery.create({
+        data: {
+          id: nanoid(),
+          event,
+          payload,
+          targetUrl,
+          status: 'pending',
+        },
+      });
+
+      // Compute HMAC signature
+      const secret = process.env.WEBHOOK_SECRET || 'dev-secret';
+      const signature = crypto.createHmac('sha256', secret).update(JSON.stringify(payload)).digest('hex');
+
+      const res = await axios.post(targetUrl, payload, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Signature': signature,
+        },
+        timeout: 10000,
+      });
+
+      await prisma.webhookDelivery.update({
+        where: { id: delivery.id },
+        data: { status: 'delivered', attempts: delivery.attempts + 1, last_attempt_at: new Date() },
+      });
+
+      logger.info(`[WEBHOOK] Delivered ${delivery.id} status=${res.status}`);
+      return { delivered: true };
+    } catch (error) {
+      logger.error(`[WEBHOOK] Delivery error: ${error.message}`);
+      // Update delivery if exists
+      try {
+        if (error?.response?.data) logger.error(`[WEBHOOK] Remote response: ${JSON.stringify(error.response.data)}`);
+      } catch (e) {}
+
+      // If prisma table exists, attempt to increment attempts
+      try {
+        if (job.data && job.data.deliveryId) {
+          await prisma.webhookDelivery.updateMany({
+            where: { id: job.data.deliveryId },
+            data: { status: 'failed', attempts: { increment: 1 }, last_attempt_at: new Date() },
+          });
+        }
+      } catch (e) {}
+
       throw error;
     }
   });

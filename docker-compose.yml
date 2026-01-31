@@ -96,6 +96,23 @@ services:
     networks:
       - aus-prop-network
 
+  ml:
+    build:
+      context: .
+      dockerfile: apps/ml/Dockerfile
+    container_name: aus-prop-ml
+    ports:
+      - '8000:8000'
+    depends_on:
+      redis:
+        condition: service_healthy
+    environment:
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - ./apps/ml:/app
+    networks:
+      - aus-prop-network
+
 volumes:
   postgres_data:
   redis_data:
