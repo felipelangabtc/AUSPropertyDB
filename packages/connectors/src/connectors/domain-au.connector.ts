@@ -6,6 +6,7 @@ import {
 } from '@aus-prop/shared';
 import { BaseSourceConnector } from '../base.connector';
 import axios, { AxiosInstance } from 'axios';
+import axiosRetry from 'axios-retry';
 
 /**
  * Domain.com.au Connector (skeleton)
@@ -30,6 +31,16 @@ export class DomainAUConnector extends BaseSourceConnector {
       headers: {
         'User-Agent': 'Mozilla/5.0 (compatible; AUS-PropertyDB/1.0; +https://auspropdb.com)',
         ...(key ? { Authorization: `Bearer ${key}` } : {}),
+      },
+    });
+
+    // Retries for transient network errors and rate limiting (429)
+    axiosRetry(this.client, {
+      retries: 3,
+      retryDelay: axiosRetry.exponentialDelay,
+      retryCondition: (error) => {
+        const status = error?.response?.status;
+        return axiosRetry.isNetworkOrIdempotentRequestError(error) || status === 429 || (status >= 500 && status < 600);
       },
     });
   }

@@ -16,6 +16,7 @@
     "@aus-prop/shared": "*",
     "@aus-prop/geo": "*",
     "axios": "^1.6.5",
+    "axios-retry": "^3.3.1",
     "cheerio": "^1.0.0-rc.12",
     "zod": "^3.22.4",
     "winston": "^3.11.0"
