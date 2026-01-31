@@ -51,4 +51,16 @@ export class AdminController {
   async rejectMerge(@Param('id') id: string) {
     return this.adminService.rejectMerge(id);
   }
+
+  @Get('webhooks')
+  @ApiOperation({ summary: 'List webhook deliveries' })
+  async listWebhooks(skip = 0, take = 50) {
+    return this.adminService.listWebhookDeliveries(take, skip);
+  }
+
+  @Post('webhooks/:id/retry')
+  @ApiOperation({ summary: 'Retry a webhook delivery' })
+  async retryWebhook(@Param('id') id: string) {
+    return this.adminService.retryWebhookDelivery(id);
+  }
 }

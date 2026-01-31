@@ -442,7 +442,10 @@ async function bootstrap() {
 
       // Compute HMAC signature
       const secret = process.env.WEBHOOK_SECRET || 'dev-secret';
-      const signature = crypto.createHmac('sha256', secret).update(JSON.stringify(payload)).digest('hex');
+      const signature = crypto
+        .createHmac('sha256', secret)
+        .update(JSON.stringify(payload))
+        .digest('hex');
 
       const res = await axios.post(targetUrl, payload, {
         headers: {
@@ -463,7 +466,8 @@ async function bootstrap() {
       logger.error(`[WEBHOOK] Delivery error: ${error.message}`);
       // Update delivery if exists
       try {
-        if (error?.response?.data) logger.error(`[WEBHOOK] Remote response: ${JSON.stringify(error.response.data)}`);
+        if (error?.response?.data)
+          logger.error(`[WEBHOOK] Remote response: ${JSON.stringify(error.response.data)}`);
       } catch (e) {}
 
       // If prisma table exists, attempt to increment attempts

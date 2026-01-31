@@ -16,7 +16,8 @@ export class AdminService {
     @InjectQueue('alerts') private alertsQueue: Queue,
     @InjectQueue('index') private indexQueue: Queue,
     @InjectQueue('reports') private reportsQueue: Queue,
-    @InjectQueue('cleanup') private cleanupQueue: Queue
+    @InjectQueue('cleanup') private cleanupQueue: Queue,
+    @InjectQueue('webhooks') private webhooksQueue: Queue
   ) {}
 
   async getMetrics() {
@@ -43,6 +44,51 @@ export class AdminService {
       },
       timestamp: new Date(),
     };
+  }
+
+  async listWebhookDeliveries(limit = 50, offset = 0) {
+    const data = await this.prisma.webhookDelivery.findMany({
+      skip: offset,
+      take: limit,
+      orderBy: { created_at: 'desc' },
+    });
+
+    const total = await this.prisma.webhookDelivery.count();
+
+    return {
+      data,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + limit < total,
+      },
+    };
+  }
+
+  async retryWebhookDelivery(id: string) {
+    const delivery = await this.prisma.webhookDelivery.findUnique({ where: { id } });
+    if (!delivery) throw new Error('Webhook delivery not found');
+
+    // Requeue delivery job with a reference to delivery id
+    const job = await this.webhooksQueue.add(
+      'deliver',
+      {
+        event: delivery.event,
+        payload: delivery.payload,
+        targetUrl: (delivery as any).targetUrl || (delivery as any).target_url,
+        deliveryId: delivery.id,
+      },
+      { attempts: 5, backoff: { type: 'exponential', delay: 1000 } }
+    );
+
+    // Mark as pending and reset attempts
+    await this.prisma.webhookDelivery.update({
+      where: { id },
+      data: { status: 'pending', attempts: 0, last_attempt_at: null },
+    });
+
+    return { jobId: job.id, status: 'requeued' };
   }
 
   async getQueueStatus() {

@@ -13,7 +13,10 @@ export const indexQueue = new Queue('index', process.env.REDIS_URL || 'redis://l
 export const alertQueue = new Queue('alerts', process.env.REDIS_URL || 'redis://localhost:6379');
 export const reportQueue = new Queue('reports', process.env.REDIS_URL || 'redis://localhost:6379');
 export const cleanupQueue = new Queue('cleanup', process.env.REDIS_URL || 'redis://localhost:6379');
-export const webhookQueue = new Queue('webhooks', process.env.REDIS_URL || 'redis://localhost:6379');
+export const webhookQueue = new Queue(
+  'webhooks',
+  process.env.REDIS_URL || 'redis://localhost:6379'
+);
 
 // Setup error handlers for all queues
 const allQueues = [
