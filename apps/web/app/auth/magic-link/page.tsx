@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function MagicLinkPage() {
+function MagicLinkContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -51,5 +51,15 @@ export default function MagicLinkPage() {
         {error && <p className="text-red-600">{error}</p>}
       </div>
     </div>
+  );
+}
+
+export default function MagicLinkPage() {
+  return (
+    <Suspense
+      fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}
+    >
+      <MagicLinkContent />
+    </Suspense>
   );
 }
