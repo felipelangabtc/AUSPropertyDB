@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "installCommand": "npm install --no-audit --no-fund",
-  "outputDirectory": ".next",
+  "buildCommand": "cd apps/web && npm run build",
+  "installCommand": "cd apps/web && npm install --no-audit --no-fund",
+  "outputDirectory": "apps/web/.next",
   "regions": ["syd1"],
   "env": {
     "NODE_ENV": "production",
