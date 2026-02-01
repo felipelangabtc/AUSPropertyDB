@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Search, MapPin, DollarSign, Bed, Bath, Calendar } from 'lucide-react';
 
-interface Property {
+export interface Property {
   id: string;
   address: string;
   price: number;
