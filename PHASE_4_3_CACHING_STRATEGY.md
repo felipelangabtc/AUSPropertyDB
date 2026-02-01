@@ -95,15 +95,15 @@ CACHE_TTL_CONFIG = {
   // Short-lived (5-10 min)
   search_results: 300,
   user_preferences: 600,
-  
+
   // Medium-lived (1 hour)
   property_details: 3600,
   price_history_short: 3600,
-  
+
   // Long-lived (1 day+)
   price_history_long: 86400,
   aggregate_data: 3600,
-  
+
   // Hot data (5-15 min)
   trending_properties: 300,
   popular_suburbs: 600,
@@ -329,7 +329,7 @@ async updateProperty(id: string, data: any) {
   const result = await this.db.properties.update({ where: { id }, data });
 
   // Invalidate caches (decorator handles this)
-  
+
   return result;
 }
 ```
