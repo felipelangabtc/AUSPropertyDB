@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "npm i -g pnpm@9.15.0 && pnpm build --filter=web",
-  "installCommand": "npm i -g pnpm@9.15.0 && pnpm install --no-frozen-lockfile",
+  "buildCommand": "npm i -g pnpm@8.15.9 && pnpm config set registry http://registry.npmjs.org/ && pnpm build --filter=web",
+  "installCommand": "npm i -g pnpm@8.15.9 && pnpm config set registry http://registry.npmjs.org/ && pnpm install --no-frozen-lockfile",
   "outputDirectory": "apps/web/.next",
   "regions": ["syd1"],
   "env": {
