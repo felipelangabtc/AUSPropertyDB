@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install --lockfile-only)",
+      "Bash(npx pnpm install --lockfile-only)"
+    ]
+  }
+}
