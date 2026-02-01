@@ -5,7 +5,12 @@
  */
 
 export { BackupService, BackupConfig, BackupMetadata } from './backup.service';
-export { FailoverService, FailoverConfig, FailoverRegion, FailoverStatus } from './failover.service';
+export {
+  FailoverService,
+  FailoverConfig,
+  FailoverRegion,
+  FailoverStatus,
+} from './failover.service';
 export {
   IncidentResponseService,
   Runbook,
@@ -58,14 +63,7 @@ export const FAILOVER_DEFAULTS = {
 /**
  * Runbook Categories
  */
-export const RUNBOOK_CATEGORIES = [
-  'Database',
-  'Cache',
-  'API',
-  'Data',
-  'Security',
-  'Network',
-];
+export const RUNBOOK_CATEGORIES = ['Database', 'Cache', 'API', 'Data', 'Security', 'Network'];
 
 /**
  * Incident Severities
