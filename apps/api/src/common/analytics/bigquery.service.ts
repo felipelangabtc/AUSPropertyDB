@@ -259,7 +259,11 @@ export class BigQueryService {
     return this.executeQuery({
       sql,
       parameters: [
-        { name: 'propertyId', parameterType: { type: 'STRING' }, parameterValue: { value: propertyId } },
+        {
+          name: 'propertyId',
+          parameterType: { type: 'STRING' },
+          parameterValue: { value: propertyId },
+        },
         { name: 'days', parameterType: { type: 'INT64' }, parameterValue: { value: days } },
       ],
     });

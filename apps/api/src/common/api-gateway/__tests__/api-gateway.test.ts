@@ -206,7 +206,7 @@ describe('API Gateway - Phase 5', () => {
     it('should initialize with default rules', () => {
       const rules = rateLimiter.getRules();
       expect(rules.length).toBeGreaterThan(0);
-      expect(rules.some(r => r.id === 'global-api')).toBe(true);
+      expect(rules.some((r) => r.id === 'global-api')).toBe(true);
     });
 
     it('should add custom rate limit rule', () => {
@@ -423,7 +423,7 @@ describe('API Gateway - Phase 5', () => {
       expect(status.allowed).toBe(false);
 
       // Wait 1 second for token refill
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await new Promise((resolve) => setTimeout(resolve, 1100));
 
       // Next request should be allowed
       status = await rateLimiter.checkRateLimit(context);
@@ -463,7 +463,7 @@ describe('API Gateway - Phase 5', () => {
       expect(status.allowed).toBe(false);
 
       // Wait for window to reset
-      await new Promise(resolve => setTimeout(resolve, 1100));
+      await new Promise((resolve) => setTimeout(resolve, 1100));
 
       // Next request should be allowed
       status = await rateLimiter.checkRateLimit(context);
@@ -537,11 +537,16 @@ describe('API Gateway - Phase 5', () => {
   describe('API Gateway Integration', () => {
     it('should support per-endpoint rate limiting', async () => {
       const contexts = [
-        { ip: '192.168.1.1', endpoint: '/api/properties/search', method: 'GET', timestamp: Date.now() },
+        {
+          ip: '192.168.1.1',
+          endpoint: '/api/properties/search',
+          method: 'GET',
+          timestamp: Date.now(),
+        },
         { ip: '192.168.1.1', endpoint: '/api/auth/login', method: 'POST', timestamp: Date.now() },
       ];
 
-      const statuses = await Promise.all(contexts.map(c => rateLimiter.checkRateLimit(c)));
+      const statuses = await Promise.all(contexts.map((c) => rateLimiter.checkRateLimit(c)));
 
       // Search should have higher limit than login
       expect(statuses[0].limit).toBeGreaterThan(statuses[1].limit);
@@ -549,11 +554,23 @@ describe('API Gateway - Phase 5', () => {
 
     it('should support per-user rate limiting', async () => {
       const contexts = [
-        { ip: '192.168.1.1', userId: 'user-1', endpoint: '/api/properties/search', method: 'GET', timestamp: Date.now() },
-        { ip: '192.168.1.1', userId: 'user-2', endpoint: '/api/properties/search', method: 'GET', timestamp: Date.now() },
+        {
+          ip: '192.168.1.1',
+          userId: 'user-1',
+          endpoint: '/api/properties/search',
+          method: 'GET',
+          timestamp: Date.now(),
+        },
+        {
+          ip: '192.168.1.1',
+          userId: 'user-2',
+          endpoint: '/api/properties/search',
+          method: 'GET',
+          timestamp: Date.now(),
+        },
       ];
 
-      const statuses = await Promise.all(contexts.map(c => rateLimiter.checkRateLimit(c)));
+      const statuses = await Promise.all(contexts.map((c) => rateLimiter.checkRateLimit(c)));
 
       // Different users should have independent limits
       expect(statuses[0].remaining).toBeGreaterThan(0);

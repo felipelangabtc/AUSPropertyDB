@@ -152,7 +152,13 @@ export class EventTrackingService {
     context: EventContext,
     userProperties?: UserProperties
   ): Promise<void> {
-    return this.trackEvent(EventType.PROPERTY_VIEWED, eventData, context, userProperties, propertyId);
+    return this.trackEvent(
+      EventType.PROPERTY_VIEWED,
+      eventData,
+      context,
+      userProperties,
+      propertyId
+    );
   }
 
   /**
@@ -164,7 +170,13 @@ export class EventTrackingService {
     context: EventContext,
     userProperties?: UserProperties
   ): Promise<void> {
-    return this.trackEvent(EventType.PROPERTY_CONTACTED, eventData, context, userProperties, propertyId);
+    return this.trackEvent(
+      EventType.PROPERTY_CONTACTED,
+      eventData,
+      context,
+      userProperties,
+      propertyId
+    );
   }
 
   /**
@@ -191,7 +203,12 @@ export class EventTrackingService {
       accountCreatedAt: new Date(),
     };
 
-    return this.trackEvent(EventType.USER_SIGNED_UP, { userType }, { ...context, userId }, userProperties);
+    return this.trackEvent(
+      EventType.USER_SIGNED_UP,
+      { userType },
+      { ...context, userId },
+      userProperties
+    );
   }
 
   /**
@@ -214,7 +231,13 @@ export class EventTrackingService {
     inquiryData: Record<string, any>,
     context: EventContext
   ): Promise<void> {
-    return this.trackEvent(EventType.INQUIRY_SUBMITTED, inquiryData, { ...context, userId }, undefined, propertyId);
+    return this.trackEvent(
+      EventType.INQUIRY_SUBMITTED,
+      inquiryData,
+      { ...context, userId },
+      undefined,
+      propertyId
+    );
   }
 
   /**

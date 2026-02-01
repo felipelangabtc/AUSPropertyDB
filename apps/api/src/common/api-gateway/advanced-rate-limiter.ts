@@ -120,7 +120,7 @@ export class AdvancedRateLimiterService {
    * Initialize default rules
    */
   private initializeRules(): void {
-    this.defaultRules.forEach(rule => {
+    this.defaultRules.forEach((rule) => {
       this.rules.set(rule.id, rule);
       this.buckets.set(rule.id, new Map());
       this.windowCounts.set(rule.id, new Map());
@@ -207,9 +207,7 @@ export class AdvancedRateLimiterService {
     }
 
     const remaining = Math.floor(bucket.tokens);
-    const resetTime = Math.ceil(
-      now / 1000 + (1 - bucket.tokens) / rule.refillRate
-    );
+    const resetTime = Math.ceil(now / 1000 + (1 - bucket.tokens) / rule.refillRate);
 
     return {
       allowed,
@@ -298,7 +296,7 @@ export class AdvancedRateLimiterService {
     const timestamps = counts.get(key) || [];
 
     // Remove old timestamps outside the window
-    const validTimestamps = timestamps.filter(t => t > windowStart);
+    const validTimestamps = timestamps.filter((t) => t > windowStart);
 
     const allowed = validTimestamps.length < rule.capacity;
 
@@ -316,7 +314,9 @@ export class AdvancedRateLimiterService {
       limit: rule.capacity,
       remaining,
       reset: resetTime,
-      retryAfter: allowed ? undefined : Math.ceil((Math.min(...validTimestamps) + window * 1000 - now) / 1000),
+      retryAfter: allowed
+        ? undefined
+        : Math.ceil((Math.min(...validTimestamps) + window * 1000 - now) / 1000),
     };
   }
 
@@ -325,7 +325,7 @@ export class AdvancedRateLimiterService {
    */
   private findMatchingRule(context: RateLimitContext): RateLimitRule | undefined {
     const matchedRules = Array.from(this.rules.values())
-      .filter(rule => {
+      .filter((rule) => {
         const regex = new RegExp(rule.pattern);
         return regex.test(context.endpoint);
       })
@@ -428,8 +428,8 @@ export class AdvancedRateLimiterService {
    * Reset all rate limits
    */
   resetAll(): void {
-    this.buckets.forEach(m => m.clear());
-    this.windowCounts.forEach(m => m.clear());
+    this.buckets.forEach((m) => m.clear());
+    this.windowCounts.forEach((m) => m.clear());
     this.logger.log('Reset all rate limits');
   }
 }

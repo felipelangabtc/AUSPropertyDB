@@ -58,12 +58,14 @@ export class LookerService {
    */
   private initializeConfig(): void {
     this.config = {
-      apiEndpoint: this.configService.get('LOOKER_API_ENDPOINT') || 'https://looker.example.com/api/3.1',
+      apiEndpoint:
+        this.configService.get('LOOKER_API_ENDPOINT') || 'https://looker.example.com/api/3.1',
       clientId: this.configService.get('LOOKER_CLIENT_ID') || '',
       clientSecret: this.configService.get('LOOKER_CLIENT_SECRET') || '',
       instanceUrl: this.configService.get('LOOKER_INSTANCE_URL') || 'https://looker.example.com',
       embedSecret: this.configService.get('LOOKER_EMBED_SECRET') || '',
-      redirectUrl: this.configService.get('LOOKER_REDIRECT_URL') || 'http://localhost:3000/auth/looker',
+      redirectUrl:
+        this.configService.get('LOOKER_REDIRECT_URL') || 'http://localhost:3000/auth/looker',
     };
 
     this.logger.log(`Looker initialized with endpoint: ${this.config.apiEndpoint}`);
@@ -98,11 +100,7 @@ export class LookerService {
   /**
    * Make API request to Looker
    */
-  private makeAPIRequest(
-    method: string,
-    path: string,
-    data?: any
-  ): Promise<any> {
+  private makeAPIRequest(method: string, path: string, data?: any): Promise<any> {
     return new Promise((resolve, reject) => {
       const url = new URL(this.config.apiEndpoint + path);
       const options = {
@@ -298,13 +296,7 @@ export class LookerService {
       const nonce = this.generateNonce();
 
       // Create embed URL with SSO
-      const embedUrl = this.createEmbedUrl(
-        userId,
-        userName,
-        userEmail,
-        externalGroupId,
-        nonce
-      );
+      const embedUrl = this.createEmbedUrl(userId, userName, userEmail, externalGroupId, nonce);
 
       return {
         nonce,
@@ -379,7 +371,11 @@ export class LookerService {
     filters?: Record<string, string>
   ): Promise<string> {
     try {
-      const session = this.generateEmbedSession(userId, `User ${userId}`, `user${userId}@example.com`);
+      const session = this.generateEmbedSession(
+        userId,
+        `User ${userId}`,
+        `user${userId}@example.com`
+      );
 
       const filterParams = new URLSearchParams();
       Object.entries(filters || {}).forEach(([key, value]) => {

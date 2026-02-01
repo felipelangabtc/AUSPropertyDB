@@ -42,15 +42,9 @@ export class TraefikGatewayService {
   private configPath: string;
 
   constructor(private configService: ConfigService) {
-    const traefikApiUrl = this.configService.get(
-      'TRAEFIK_API_URL',
-      'http://localhost:8080'
-    );
+    const traefikApiUrl = this.configService.get('TRAEFIK_API_URL', 'http://localhost:8080');
 
-    this.configPath = this.configService.get(
-      'TRAEFIK_CONFIG_PATH',
-      '/etc/traefik'
-    );
+    this.configPath = this.configService.get('TRAEFIK_CONFIG_PATH', '/etc/traefik');
 
     this.traefikClient = axios.create({
       baseURL: traefikApiUrl,
@@ -80,9 +74,7 @@ export class TraefikGatewayService {
    */
   async getService(serviceName: string): Promise<any> {
     try {
-      const response = await this.traefikClient.get(
-        `/api/http/services/${serviceName}`
-      );
+      const response = await this.traefikClient.get(`/api/http/services/${serviceName}`);
       return response.data;
     } catch (error) {
       this.logger.error(`Failed to get service ${serviceName}: ${error.message}`);
@@ -109,9 +101,7 @@ export class TraefikGatewayService {
    */
   async getRouter(routerName: string): Promise<any> {
     try {
-      const response = await this.traefikClient.get(
-        `/api/http/routers/${routerName}`
-      );
+      const response = await this.traefikClient.get(`/api/http/routers/${routerName}`);
       return response.data;
     } catch (error) {
       this.logger.error(`Failed to get router ${routerName}: ${error.message}`);
@@ -168,9 +158,7 @@ export class TraefikGatewayService {
   /**
    * Build rate limiting middleware configuration
    */
-  buildRateLimitMiddleware(
-    config: AdvancedRateLimiter
-  ): Record<string, any> {
+  buildRateLimitMiddleware(config: AdvancedRateLimiter): Record<string, any> {
     const baseConfig = {
       average: config.capacity,
       burst: Math.ceil(config.capacity * 1.5),
@@ -276,11 +264,7 @@ export class TraefikGatewayService {
   }): Record<string, any> {
     return {
       minResponseBodyBytes: config.minResponseBodyBytes || 1024,
-      excludedContentTypes: config.excludedContentTypes || [
-        'image/jpeg',
-        'image/png',
-        'image/gif',
-      ],
+      excludedContentTypes: config.excludedContentTypes || ['image/jpeg', 'image/png', 'image/gif'],
       level: 5, // 1-9, default 5
     };
   }
@@ -321,13 +305,10 @@ export class TraefikGatewayService {
    */
   async loadStaticConfig(): Promise<Record<string, any>> {
     try {
-      const fs = await import('fs').then(m => m.promises);
+      const fs = await import('fs').then((m) => m.promises);
       const yaml = await import('js-yaml');
 
-      const configContent = await fs.readFile(
-        `${this.configPath}/traefik.yml`,
-        'utf-8'
-      );
+      const configContent = await fs.readFile(`${this.configPath}/traefik.yml`, 'utf-8');
       return yaml.load(configContent) as Record<string, any>;
     } catch (error) {
       this.logger.error(`Failed to load static config: ${error.message}`);
@@ -340,13 +321,10 @@ export class TraefikGatewayService {
    */
   async loadDynamicConfig(): Promise<Record<string, any>> {
     try {
-      const fs = await import('fs').then(m => m.promises);
+      const fs = await import('fs').then((m) => m.promises);
       const yaml = await import('js-yaml');
 
-      const configContent = await fs.readFile(
-        `${this.configPath}/dynamic.yml`,
-        'utf-8'
-      );
+      const configContent = await fs.readFile(`${this.configPath}/dynamic.yml`, 'utf-8');
       return yaml.load(configContent) as Record<string, any>;
     } catch (error) {
       this.logger.error(`Failed to load dynamic config: ${error.message}`);

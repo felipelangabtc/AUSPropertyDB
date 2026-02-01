@@ -22,7 +22,11 @@ interface SearchBarProps {
   suggestions?: string[];
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, loading = false, suggestions = [] }) => {
+export const SearchBar: React.FC<SearchBarProps> = ({
+  onSearch,
+  loading = false,
+  suggestions = [],
+}) => {
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<SearchFilters>({});
@@ -45,7 +49,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, loading = false,
   };
 
   const handleFilterChange = (key: string, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   return (
@@ -116,7 +120,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, loading = false,
                 type="number"
                 placeholder="Min"
                 value={filters.minPrice || ''}
-                onChange={(e) => handleFilterChange('minPrice', e.target.value ? parseInt(e.target.value) : undefined)}
+                onChange={(e) =>
+                  handleFilterChange(
+                    'minPrice',
+                    e.target.value ? parseInt(e.target.value) : undefined
+                  )
+                }
                 className="flex-1 bg-transparent outline-none text-gray-900 placeholder-gray-500"
               />
             </div>
@@ -130,7 +139,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, loading = false,
                 type="number"
                 placeholder="Max"
                 value={filters.maxPrice || ''}
-                onChange={(e) => handleFilterChange('maxPrice', e.target.value ? parseInt(e.target.value) : undefined)}
+                onChange={(e) =>
+                  handleFilterChange(
+                    'maxPrice',
+                    e.target.value ? parseInt(e.target.value) : undefined
+                  )
+                }
                 className="flex-1 bg-transparent outline-none text-gray-900 placeholder-gray-500"
               />
             </div>
@@ -141,7 +155,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, loading = false,
             <label className="block text-sm font-semibold text-gray-700 mb-2">Bedrooms</label>
             <select
               value={filters.minBeds || ''}
-              onChange={(e) => handleFilterChange('minBeds', e.target.value ? parseInt(e.target.value) : undefined)}
+              onChange={(e) =>
+                handleFilterChange('minBeds', e.target.value ? parseInt(e.target.value) : undefined)
+              }
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 outline-none"
             >
               <option value="">Any</option>
@@ -158,7 +174,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, loading = false,
             <label className="block text-sm font-semibold text-gray-700 mb-2">Bathrooms</label>
             <select
               value={filters.minBaths || ''}
-              onChange={(e) => handleFilterChange('minBaths', e.target.value ? parseInt(e.target.value) : undefined)}
+              onChange={(e) =>
+                handleFilterChange(
+                  'minBaths',
+                  e.target.value ? parseInt(e.target.value) : undefined
+                )
+              }
               className="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-900 outline-none"
             >
               <option value="">Any</option>

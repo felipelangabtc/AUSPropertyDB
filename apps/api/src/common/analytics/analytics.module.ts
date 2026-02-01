@@ -9,18 +9,8 @@ import { AnalyticsController } from './analytics.controller';
 @Global()
 @Module({
   imports: [ConfigModule],
-  providers: [
-    BigQueryService,
-    EventTrackingService,
-    LookerService,
-    ReportGenerationService,
-  ],
+  providers: [BigQueryService, EventTrackingService, LookerService, ReportGenerationService],
   controllers: [AnalyticsController],
-  exports: [
-    BigQueryService,
-    EventTrackingService,
-    LookerService,
-    ReportGenerationService,
-  ],
+  exports: [BigQueryService, EventTrackingService, LookerService, ReportGenerationService],
 })
 export class AnalyticsModule {}

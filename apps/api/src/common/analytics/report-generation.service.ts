@@ -148,8 +148,16 @@ export class ReportGenerationService {
     const result = await this.bigqueryService.executeQuery({
       sql: query,
       parameters: [
-        { name: 'startDate', parameterType: { type: 'TIMESTAMP' }, parameterValue: { value: config.dateRange.startDate } },
-        { name: 'endDate', parameterType: { type: 'TIMESTAMP' }, parameterValue: { value: config.dateRange.endDate } },
+        {
+          name: 'startDate',
+          parameterType: { type: 'TIMESTAMP' },
+          parameterValue: { value: config.dateRange.startDate },
+        },
+        {
+          name: 'endDate',
+          parameterType: { type: 'TIMESTAMP' },
+          parameterValue: { value: config.dateRange.endDate },
+        },
       ],
     });
 
@@ -180,17 +188,28 @@ export class ReportGenerationService {
           metrics: [
             {
               label: 'Average Contact Rate',
-              value: ((result.data || []).reduce((sum: number, p: any) => sum + (p.contact_rate || 0), 0) / (result.data || []).length).toFixed(2),
+              value: (
+                (result.data || []).reduce(
+                  (sum: number, p: any) => sum + (p.contact_rate || 0),
+                  0
+                ) / (result.data || []).length
+              ).toFixed(2),
               unit: '%',
             },
             {
               label: 'Total Views',
-              value: (result.data || []).reduce((sum: number, p: any) => sum + (p.total_views || 0), 0),
+              value: (result.data || []).reduce(
+                (sum: number, p: any) => sum + (p.total_views || 0),
+                0
+              ),
               unit: 'views',
             },
             {
               label: 'Total Contacts',
-              value: (result.data || []).reduce((sum: number, p: any) => sum + (p.contacts || 0), 0),
+              value: (result.data || []).reduce(
+                (sum: number, p: any) => sum + (p.contacts || 0),
+                0
+              ),
               unit: 'contacts',
             },
           ],
@@ -218,8 +237,16 @@ export class ReportGenerationService {
     const result = await this.bigqueryService.executeQuery({
       sql: query,
       parameters: [
-        { name: 'startDate', parameterType: { type: 'TIMESTAMP' }, parameterValue: { value: config.dateRange.startDate } },
-        { name: 'endDate', parameterType: { type: 'TIMESTAMP' }, parameterValue: { value: config.dateRange.endDate } },
+        {
+          name: 'startDate',
+          parameterType: { type: 'TIMESTAMP' },
+          parameterValue: { value: config.dateRange.startDate },
+        },
+        {
+          name: 'endDate',
+          parameterType: { type: 'TIMESTAMP' },
+          parameterValue: { value: config.dateRange.endDate },
+        },
       ],
     });
 
@@ -311,7 +338,11 @@ export class ReportGenerationService {
             },
             {
               label: 'Average Property Price Searched',
-              value: (result.data || []).reduce((sum: number, l: any) => sum + (l.avg_price_searched || 0), 0) / (result.data || []).length,
+              value:
+                (result.data || []).reduce(
+                  (sum: number, l: any) => sum + (l.avg_price_searched || 0),
+                  0
+                ) / (result.data || []).length,
               unit: 'AUD',
             },
           ],

@@ -41,8 +41,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onViewDeta
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer"
-         onClick={() => onViewDetails(property)}>
+    <div
+      className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer"
+      onClick={() => onViewDetails(property)}
+    >
       {/* Image Container */}
       <div className="relative h-48 bg-gray-200 overflow-hidden">
         {!imageError ? (

@@ -102,21 +102,16 @@ export class KongGatewayService {
    */
   async createRoute(route: KongRoute): Promise<ApiResponse> {
     try {
-      const response = await this.kongClient.post(
-        `/services/${route.service}/routes`,
-        {
-          name: route.name,
-          paths: route.paths,
-          methods: route.methods || ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-          protocols: route.protocols || ['http', 'https'],
-          strip_path: route.strip_path ?? true,
-          preserve_host: route.preserve_host ?? false,
-        }
-      );
+      const response = await this.kongClient.post(`/services/${route.service}/routes`, {
+        name: route.name,
+        paths: route.paths,
+        methods: route.methods || ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+        protocols: route.protocols || ['http', 'https'],
+        strip_path: route.strip_path ?? true,
+        preserve_host: route.preserve_host ?? false,
+      });
 
-      this.logger.log(
-        `Route created: ${route.name} → ${route.paths.join(', ')}`
-      );
+      this.logger.log(`Route created: ${route.name} → ${route.paths.join(', ')}`);
       return {
         success: true,
         data: response.data,
@@ -134,19 +129,14 @@ export class KongGatewayService {
   /**
    * Apply rate limiting plugin
    */
-  async applyRateLimiting(
-    config: RateLimitConfig
-  ): Promise<ApiResponse> {
+  async applyRateLimiting(config: RateLimitConfig): Promise<ApiResponse> {
     try {
       const pluginConfig = this.buildRateLimitingConfig(config);
 
-      const response = await this.kongClient.post(
-        `/services/${config.service}/plugins`,
-        {
-          name: 'rate-limiting',
-          config: pluginConfig,
-        }
-      );
+      const response = await this.kongClient.post(`/services/${config.service}/plugins`, {
+        name: 'rate-limiting',
+        config: pluginConfig,
+      });
 
       this.logger.log(
         `Rate limiting applied: ${config.service} (${config.limits.requests}/${config.limits.window}s)`
@@ -173,13 +163,10 @@ export class KongGatewayService {
     authType: 'jwt' | 'oauth2' | 'key-auth'
   ): Promise<ApiResponse> {
     try {
-      const response = await this.kongClient.post(
-        `/services/${service}/plugins`,
-        {
-          name: authType,
-          config: this.buildAuthConfig(authType),
-        }
-      );
+      const response = await this.kongClient.post(`/services/${service}/plugins`, {
+        name: authType,
+        config: this.buildAuthConfig(authType),
+      });
 
       this.logger.log(`Authentication applied: ${service} (${authType})`);
       return {
@@ -201,38 +188,33 @@ export class KongGatewayService {
    */
   async applyCORS(service: string, origins: string[]): Promise<ApiResponse> {
     try {
-      const response = await this.kongClient.post(
-        `/services/${service}/plugins`,
-        {
-          name: 'cors',
-          config: {
-            origins: origins,
-            methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-            headers: [
-              'Accept',
-              'Accept-Version',
-              'Content-Length',
-              'Content-MD5',
-              'Content-Type',
-              'Date',
-              'X-Auth-Token',
-              'Authorization',
-            ],
-            expose_headers: [
-              'X-Auth-Token',
-              'X-Rate-Limit-Limit',
-              'X-Rate-Limit-Remaining',
-              'X-Rate-Limit-Reset',
-            ],
-            credentials: true,
-            max_age: 3600,
-          },
-        }
-      );
+      const response = await this.kongClient.post(`/services/${service}/plugins`, {
+        name: 'cors',
+        config: {
+          origins: origins,
+          methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+          headers: [
+            'Accept',
+            'Accept-Version',
+            'Content-Length',
+            'Content-MD5',
+            'Content-Type',
+            'Date',
+            'X-Auth-Token',
+            'Authorization',
+          ],
+          expose_headers: [
+            'X-Auth-Token',
+            'X-Rate-Limit-Limit',
+            'X-Rate-Limit-Remaining',
+            'X-Rate-Limit-Reset',
+          ],
+          credentials: true,
+          max_age: 3600,
+        },
+      });
 
-      this.logger.log(
-        `CORS enabled: ${service} (origins: ${origins.join(', ')})`
-      );
+      this.logger.log(`CORS enabled: ${service} (origins: ${origins.join(', ')})`);
       return {
         success: true,
         data: response.data,
@@ -255,15 +237,12 @@ export class KongGatewayService {
     validationRules: Record<string, any>
   ): Promise<ApiResponse> {
     try {
-      const response = await this.kongClient.post(
-        `/services/${service}/plugins`,
-        {
-          name: 'request-validator',
-          config: {
-            body_schema: JSON.stringify(validationRules),
-          },
-        }
-      );
+      const response = await this.kongClient.post(`/services/${service}/plugins`, {
+        name: 'request-validator',
+        config: {
+          body_schema: JSON.stringify(validationRules),
+        },
+      });
 
       this.logger.log(`Request validation applied: ${service}`);
       return {
@@ -272,9 +251,7 @@ export class KongGatewayService {
         message: `Request validation configured for '${service}'`,
       };
     } catch (error) {
-      this.logger.error(
-        `Failed to apply request validation: ${error.message}`
-      );
+      this.logger.error(`Failed to apply request validation: ${error.message}`);
       return {
         success: false,
         error: error.message,
@@ -391,9 +368,7 @@ export class KongGatewayService {
   /**
    * Build authentication configuration
    */
-  private buildAuthConfig(
-    authType: 'jwt' | 'oauth2' | 'key-auth'
-  ): Record<string, any> {
+  private buildAuthConfig(authType: 'jwt' | 'oauth2' | 'key-auth'): Record<string, any> {
     switch (authType) {
       case 'jwt':
         return {

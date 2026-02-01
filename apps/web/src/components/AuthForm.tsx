@@ -28,7 +28,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, onSwitchForm
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
@@ -80,7 +80,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, onSwitchForm
             ? 'Check your email for password reset link'
             : 'Logged in successfully! Redirecting...'
       );
-      
+
       setTimeout(() => {
         if (type !== 'forgot-password') {
           router.push(type === 'login' ? '/dashboard' : '/login');
@@ -136,7 +136,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, onSwitchForm
           <>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700 mb-1">
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-semibold text-gray-700 mb-1"
+                >
                   First Name
                 </label>
                 <input
@@ -152,7 +155,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, onSwitchForm
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-semibold text-gray-700 mb-1">
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-semibold text-gray-700 mb-1"
+                >
                   Last Name
                 </label>
                 <input
@@ -225,7 +231,10 @@ export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, onSwitchForm
             {/* Confirm Password (Register only) */}
             {type === 'register' && (
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-1">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-semibold text-gray-700 mb-1"
+                >
                   Confirm Password
                 </label>
                 <div className="flex items-center bg-gray-100 rounded-lg px-4 py-2">
@@ -292,7 +301,13 @@ export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, onSwitchForm
           disabled={loading}
           className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 rounded-lg transition-colors mt-6"
         >
-          {loading ? 'Processing...' : type === 'login' ? 'Sign In' : type === 'register' ? 'Create Account' : 'Send Reset Link'}
+          {loading
+            ? 'Processing...'
+            : type === 'login'
+              ? 'Sign In'
+              : type === 'register'
+                ? 'Create Account'
+                : 'Send Reset Link'}
         </button>
 
         {/* Switch Form Links */}

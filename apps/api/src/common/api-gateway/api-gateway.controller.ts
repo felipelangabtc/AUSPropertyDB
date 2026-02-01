@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, Logger } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+  HttpCode,
+  Logger,
+} from '@nestjs/common';
 import { KongGatewayService, KongService, KongRoute, RateLimitConfig } from './kong.gateway';
 import { TraefikGatewayService, AdvancedRateLimiter } from './traefik.gateway';
 import { AdvancedRateLimiterService, RateLimitRule } from './advanced-rate-limiter';
@@ -10,7 +21,7 @@ export class ApiGatewayController {
   constructor(
     private kongGateway: KongGatewayService,
     private traefikGateway: TraefikGatewayService,
-    private rateLimiter: AdvancedRateLimiterService,
+    private rateLimiter: AdvancedRateLimiterService
   ) {}
 
   // Kong Gateway Endpoints
@@ -135,10 +146,7 @@ export class ApiGatewayController {
   }
 
   @Put('rate-limiting/rules/:id')
-  async updateRateLimitRule(
-    @Param('id') ruleId: string,
-    @Body() updates: Partial<RateLimitRule>
-  ) {
+  async updateRateLimitRule(@Param('id') ruleId: string, @Body() updates: Partial<RateLimitRule>) {
     this.logger.log(`Updating rate limit rule: ${ruleId}`);
     this.rateLimiter.updateRule(ruleId, updates);
     return {

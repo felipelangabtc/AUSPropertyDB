@@ -73,7 +73,9 @@ describe('Analytics Module', () => {
             createPropertyAnalyticsDashboard: jest.fn().mockResolvedValue({ id: 'dash-1' }),
             createUserBehaviorDashboard: jest.fn().mockResolvedValue({ id: 'dash-2' }),
             createMarketInsightsDashboard: jest.fn().mockResolvedValue({ id: 'dash-3' }),
-            getDashboardEmbedUrl: jest.fn().mockResolvedValue('https://looker.test.com/embed/dashboards/1'),
+            getDashboardEmbedUrl: jest
+              .fn()
+              .mockResolvedValue('https://looker.test.com/embed/dashboards/1'),
             generateEmbedSession: jest.fn().mockReturnValue({ nonce: 'abc123' }),
             healthCheck: jest.fn().mockResolvedValue(true),
           },

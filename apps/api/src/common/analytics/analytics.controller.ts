@@ -2,7 +2,12 @@ import { Controller, Get, Post, Body, Param, Query, UseGuards, Logger } from '@n
 import { BigQueryService, AnalyticsQuery } from './bigquery.service';
 import { EventTrackingService, EventType, EventContext } from './event-tracking.service';
 import { LookerService } from './looker.service';
-import { ReportGenerationService, ReportConfig, ReportType, ReportFormat } from './report-generation.service';
+import {
+  ReportGenerationService,
+  ReportConfig,
+  ReportType,
+  ReportFormat,
+} from './report-generation.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from '@nestjs/common';
 
@@ -58,9 +63,7 @@ export class AnalyticsController {
    */
   @Get('search')
   @UseGuards(AuthGuard('jwt'))
-  async getSearchAnalytics(
-    @Query('days') days: number = 30
-  ): Promise<any> {
+  async getSearchAnalytics(@Query('days') days: number = 30): Promise<any> {
     this.logger.log('Fetching search analytics');
     return this.bigqueryService.getSearchAnalytics(days);
   }
@@ -70,9 +73,7 @@ export class AnalyticsController {
    */
   @Get('conversion-funnel')
   @UseGuards(AuthGuard('jwt'))
-  async getConversionFunnel(
-    @Query('days') days: number = 30
-  ): Promise<any> {
+  async getConversionFunnel(@Query('days') days: number = 30): Promise<any> {
     this.logger.log('Fetching conversion funnel analytics');
     return this.bigqueryService.getConversionFunnel(days);
   }
@@ -95,10 +96,7 @@ export class AnalyticsController {
    */
   @Post('query')
   @UseGuards(AuthGuard('jwt'))
-  async executeQuery(
-    @Body() queryData: AnalyticsQuery,
-    @User() currentUser: any
-  ): Promise<any> {
+  async executeQuery(@Body() queryData: AnalyticsQuery, @User() currentUser: any): Promise<any> {
     // Only admins can execute custom queries
     if (currentUser.role !== 'admin') {
       throw new Error('Unauthorized');
@@ -113,7 +111,8 @@ export class AnalyticsController {
    */
   @Post('events/track')
   async trackEvent(
-    @Body() eventData: {
+    @Body()
+    eventData: {
       eventType: EventType;
       data: Record<string, any>;
       context: EventContext;
@@ -160,9 +159,7 @@ export class AnalyticsController {
    */
   @Post('dashboards/property')
   @UseGuards(AuthGuard('jwt'))
-  async createPropertyDashboard(
-    @User() currentUser: any
-  ): Promise<any> {
+  async createPropertyDashboard(@User() currentUser: any): Promise<any> {
     if (currentUser.role !== 'admin') {
       throw new Error('Unauthorized');
     }
@@ -176,9 +173,7 @@ export class AnalyticsController {
    */
   @Post('dashboards/user-behavior')
   @UseGuards(AuthGuard('jwt'))
-  async createUserBehaviorDashboard(
-    @User() currentUser: any
-  ): Promise<any> {
+  async createUserBehaviorDashboard(@User() currentUser: any): Promise<any> {
     if (currentUser.role !== 'admin') {
       throw new Error('Unauthorized');
     }
@@ -192,9 +187,7 @@ export class AnalyticsController {
    */
   @Post('dashboards/market-insights')
   @UseGuards(AuthGuard('jwt'))
-  async createMarketDashboard(
-    @User() currentUser: any
-  ): Promise<any> {
+  async createMarketDashboard(@User() currentUser: any): Promise<any> {
     if (currentUser.role !== 'admin') {
       throw new Error('Unauthorized');
     }
@@ -231,7 +224,8 @@ export class AnalyticsController {
   @Post('reports')
   @UseGuards(AuthGuard('jwt'))
   async generateReport(
-    @Body() reportConfig: {
+    @Body()
+    reportConfig: {
       type: ReportType;
       format: ReportFormat;
       dateRange: { startDate: string; endDate: string };
