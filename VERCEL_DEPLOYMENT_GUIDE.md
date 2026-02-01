@@ -1,6 +1,6 @@
 # 🚀 Guia Completo: Deploy no Vercel
 
-**Última atualização**: Fevereiro 1, 2026  
+**Última atualização**: Fevereiro 1, 2026
 **Status**: ✅ Projeto pronto para Vercel
 
 ---
@@ -226,7 +226,7 @@ pnpm build --filter=web
 # Simular ambiente de produção do Vercel
 npx vercel dev
 
-# Resultado: 
+# Resultado:
 # ✓ Ready on http://localhost:3000
 # ✓ Build output analyzed in XXms
 ```
@@ -550,11 +550,11 @@ Após deploy no Vercel:
 
 Seu projeto está agora:
 
-✅ Pronto para Vercel  
-✅ Configurado com variáveis de ambiente  
-✅ Otimizado para produção  
-✅ Com auto-deploy via GitHub  
-✅ Com monitoramento ativo  
+✅ Pronto para Vercel
+✅ Configurado com variáveis de ambiente
+✅ Otimizado para produção
+✅ Com auto-deploy via GitHub
+✅ Com monitoramento ativo
 
 **Próximos passos:**
 

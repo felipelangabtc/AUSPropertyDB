@@ -89,14 +89,14 @@ export class CircuitBreaker {
    */
   private onFailure(): void {
     const now = Date.now();
-    
+
     // Reset failure count if outside monitoring period
     if (now - this.lastFailureTime > this.monitoringPeriod) {
       this.failureCount = 1;
     } else {
       this.failureCount++;
     }
-    
+
     this.lastFailureTime = now;
 
     // Open circuit if threshold exceeded

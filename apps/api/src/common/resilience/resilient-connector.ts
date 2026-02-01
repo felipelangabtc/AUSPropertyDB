@@ -14,19 +14,16 @@ export class ResilientConnectorBase {
 
   constructor(protected connectorName: string) {
     // Get or create circuit breaker for this connector
-    this.breaker = circuitBreakerRegistry.getBreaker(
-      connectorName,
-      {
-        failureThreshold: 5,
-        resetTimeout: 60000, // 1 minute
-        onStateChange: (from, to) => {
-          logger.warn(`[${connectorName}] Circuit breaker state changed`, {
-            from,
-            to,
-          });
-        },
+    this.breaker = circuitBreakerRegistry.getBreaker(connectorName, {
+      failureThreshold: 5,
+      resetTimeout: 60000, // 1 minute
+      onStateChange: (from, to) => {
+        logger.warn(`[${connectorName}] Circuit breaker state changed`, {
+          from,
+          to,
+        });
       },
-    );
+    });
   }
 
   /**
@@ -94,7 +91,7 @@ export class ResilientConnectorBase {
 export class ResilientRealEstateConnector extends ResilientConnectorBase {
   constructor() {
     super('realestate-au');
-    
+
     // Initialize Axios client with timeout
     this.client = axios.create({
       timeout: 30000,
@@ -132,7 +129,7 @@ export class ResilientRealEstateConnector extends ResilientConnectorBase {
 export class ResilientDomainConnector extends ResilientConnectorBase {
   constructor() {
     super('domain-au');
-    
+
     this.client = axios.create({
       timeout: 30000,
       baseURL: 'https://api.domain.com.au',
@@ -166,7 +163,7 @@ export class ResilientConnectorRegistry {
 
   constructor(
     private realEstateConnector: ResilientRealEstateConnector,
-    private domainConnector: ResilientDomainConnector,
+    private domainConnector: ResilientDomainConnector
   ) {
     this.connectors.set('realestate-au', realEstateConnector);
     this.connectors.set('domain-au', domainConnector);

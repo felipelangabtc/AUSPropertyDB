@@ -1,9 +1,9 @@
 # AI/ML Operations Guide
 
-**Version**: 1.0  
-**Created**: February 1, 2026  
-**Status**: Ready for Production  
-**Audience**: ML Engineers, Data Scientists, DevOps  
+**Version**: 1.0
+**Created**: February 1, 2026
+**Status**: Ready for Production
+**Audience**: ML Engineers, Data Scientists, DevOps
 
 ---
 
@@ -201,10 +201,10 @@ Panels:
    ```python
    # Reduce model size by 75%
    import tensorflow as tf
-   
+
    converter = tf.lite.TFLiteConverter.from_saved_model(model_path)
    converter.optimizations = [tf.lite.Optimize.DEFAULT]
-   
+
    tflite_model = converter.convert()
    # Original: 50MB → Quantized: 12.5MB
    ```
@@ -213,7 +213,7 @@ Panels:
    ```python
    # Process multiple predictions at once
    batch_size = 100
-   
+
    for batch in batches:
        predictions = model.predict(batch)
        # Latency: 100 predictions in 500ms (5ms per prediction)
@@ -223,7 +223,7 @@ Panels:
    ```python
    # Cache predictions for common inputs
    from functools import lru_cache
-   
+
    @lru_cache(maxsize=10000)
    def predict_cached(property_hash):
        return model.predict(property_hash)
@@ -253,7 +253,7 @@ Panels:
    Before: n1-highmem-8 ($0.44/hour)
    After: n1-standard-4 ($0.10/hour)
    Savings: 77% ($3,000/month)
-   
+
    Latency impact: 5ms → 8ms (acceptable)
    ```
 
@@ -344,7 +344,7 @@ def test_known_properties():
         (property1, expected_value1),
         (property2, expected_value2),
     ]
-    
+
     for prop, expected in known_data:
         predicted = model.predict(prop)
         error_pct = abs(predicted - expected) / expected
@@ -354,12 +354,12 @@ def test_known_properties():
 def test_latency():
     """Test prediction latency"""
     import time
-    
+
     start = time.time()
     for _ in range(100):
         model.predict(test_property)
     elapsed = time.time() - start
-    
+
     avg_latency = elapsed / 100
     assert avg_latency < 0.1, f"Latency > 100ms: {avg_latency}s"
 
@@ -367,11 +367,11 @@ def test_latency():
 def test_valuation_fairness():
     """Test for bias in valuations"""
     properties_by_location = group_by_location(test_data)
-    
+
     for location, properties in properties_by_location.items():
         valuations = [model.predict(p) for p in properties]
         price_per_sqm = [v / p.area for v, p in zip(valuations, properties)]
-        
+
         # Check variance not too high
         variance = statistics.stdev(price_per_sqm)
         expected_variance = 0.1  # 10%
@@ -481,9 +481,9 @@ resources:
 ```python
 # 1. Check recent predictions
 recent_errors = db.query("""
-    SELECT * FROM predictions 
-    WHERE created_at > NOW() - INTERVAL 1 HOUR 
-    AND actual IS NOT NULL 
+    SELECT * FROM predictions
+    WHERE created_at > NOW() - INTERVAL 1 HOUR
+    AND actual IS NOT NULL
     AND ABS(predicted - actual) > THRESHOLD
 """)
 
@@ -586,7 +586,6 @@ Total:         $3,800/month
 
 ---
 
-**Status**: Production Ready  
-**Last Updated**: February 1, 2026  
-**Next Review**: May 1, 2026  
-
+**Status**: Production Ready
+**Last Updated**: February 1, 2026
+**Next Review**: May 1, 2026

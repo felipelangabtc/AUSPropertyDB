@@ -1,6 +1,6 @@
 # 🚀 Quick Start: Deploy no Vercel em 10 Passos
 
-**Tempo estimado**: 30 minutos  
+**Tempo estimado**: 30 minutos
 **Status**: ✅ Projeto 100% pronto para Vercel
 
 ---

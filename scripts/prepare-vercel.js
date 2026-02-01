@@ -55,7 +55,7 @@ async function main() {
 
   // Step 1: Check prerequisites
   log('\n📋 Step 1: Checking prerequisites...', 'blue');
-  
+
   const checks = [
     { file: 'vercel.json', name: 'Vercel config' },
     { file: '.vercelignore', name: 'Vercel ignore' },
@@ -107,11 +107,11 @@ async function main() {
   // Step 7: Git status
   log('\n📋 Step 7: Git status...', 'blue');
   try {
-    const status = execSync('git status --porcelain', { 
+    const status = execSync('git status --porcelain', {
       encoding: 'utf-8',
-      cwd: projectRoot 
+      cwd: projectRoot,
     });
-    
+
     if (status) {
       log('\nUncommitted changes:', 'yellow');
       log(status);
@@ -133,7 +133,7 @@ async function main() {
   log('Deployment guide: VERCEL_DEPLOYMENT_GUIDE.md\n', 'blue');
 }
 
-main().catch(error => {
+main().catch((error) => {
   log(`Fatal error: ${error.message}`, 'red');
   process.exit(1);
 });
