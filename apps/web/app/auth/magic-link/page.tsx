@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function MagicLinkPage() {
@@ -10,7 +10,7 @@ export default function MagicLinkPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const verifyMagicLink = async () => {
       if (!token) {
         setError('No token provided');
