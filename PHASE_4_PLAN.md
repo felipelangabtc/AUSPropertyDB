@@ -24,7 +24,7 @@ class CircuitBreaker {
     if (this.state === 'open') {
       throw new Error('Circuit breaker is open');
     }
-    
+
     try {
       const result = await fn();
       this.onSuccess();
@@ -115,21 +115,21 @@ Ensure database queries are efficient and scalable.
 #### 4.2.1 Query Optimization
 ```sql
 -- Identify slow queries
-SELECT query, calls, mean_exec_time, max_exec_time 
-FROM pg_stat_statements 
-WHERE mean_exec_time > 100 
+SELECT query, calls, mean_exec_time, max_exec_time
+FROM pg_stat_statements
+WHERE mean_exec_time > 100
 ORDER BY mean_exec_time DESC;
 
 -- Add indexes for common filters
 CREATE INDEX idx_properties_suburb ON properties(suburb);
 CREATE INDEX idx_listings_price ON listings(price);
 CREATE INDEX idx_price_history_created_at ON price_history(created_at);
-CREATE INDEX idx_price_history_property_created 
+CREATE INDEX idx_price_history_property_created
   ON price_history(property_id, created_at);
 
 -- Composite index for common queries
-CREATE INDEX idx_properties_geo 
-  ON properties(lat, lng) 
+CREATE INDEX idx_properties_geo
+  ON properties(lat, lng)
   WHERE is_active = true;
 ```
 
@@ -205,11 +205,11 @@ async function getProperty(id: string) {
 
   // Check L3
   property = await prisma.property.findUnique({ where: { id } });
-  
+
   // Populate L2 (1 hour TTL)
   await redis.set(`property:${id}`, JSON.stringify(property), 'EX', 3600);
   l1Cache.set(id, property);
-  
+
   return property;
 }
 ```
@@ -226,7 +226,7 @@ async updateProperty(id: string, data: PropertyUpdateDto) {
   // Invalidate caches
   l1Cache.delete(id);
   await redis.del(`property:${id}`);
-  
+
   // Broadcast invalidation to other instances
   await redis.publish('property:updated', id);
 

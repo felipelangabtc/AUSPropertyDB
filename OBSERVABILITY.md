@@ -214,19 +214,19 @@ groups:
         for: 5m
         annotations:
           summary: "High error rate detected"
-          
+
       - alert: SlowQueries
         expr: histogram_quantile(0.95, db_query_duration_seconds) > 1
         for: 5m
         annotations:
           summary: "Database queries are slow"
-          
+
       - alert: QueueBacklog
         expr: job_queue_size > 1000
         for: 10m
         annotations:
           summary: "Job queue is backed up"
-          
+
       - alert: CacheMissRate
         expr: rate(cache_misses_total[5m]) / (rate(cache_hits_total[5m]) + rate(cache_misses_total[5m])) > 0.5
         for: 5m

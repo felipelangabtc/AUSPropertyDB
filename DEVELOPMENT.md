@@ -136,7 +136,7 @@ model Property {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
   listings      Listing[]
-  
+
   @@map("properties")
 }
 
@@ -146,7 +146,7 @@ model Listing {
   property      Property @relation(fields: [property_id], references: [id])
   price         Int
   created_at    DateTime @default(now())
-  
+
   @@map("listings")
 }
 ```
@@ -215,7 +215,7 @@ describe('Property API', () => {
     const res = await request(app.getHttpServer())
       .get('/properties/123')
       .expect(200);
-    
+
     expect(res.body).toHaveProperty('id');
     expect(res.body.id).toBe('123');
   });

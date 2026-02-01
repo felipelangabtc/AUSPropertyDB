@@ -14,6 +14,7 @@ import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { MlModule } from './modules/ml/ml.module';
 import { BullModule as BullModuleRegister } from '@nestjs/bull';
 import { HttpMetricsMiddleware } from './common/middleware/http-metrics.middleware';
+import { ResilienceMiddleware } from './common/resilience/resilience.middleware';
 
 @Module({
   imports: [
@@ -54,6 +55,9 @@ import { HttpMetricsMiddleware } from './common/middleware/http-metrics.middlewa
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    // Register resilience middleware first for timeout protection
+    consumer.apply(ResilienceMiddleware).forRoutes('*');
+    // Then apply metrics middleware
     consumer.apply(HttpMetricsMiddleware).forRoutes('*');
   }
 }
