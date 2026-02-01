@@ -1,0 +1,48 @@
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+COPY pnpm-workspace.yaml ./
+RUN npm install -g pnpm@8 && pnpm install --frozen-lockfile
+
+# Copy source
+COPY . .
+
+# Build API
+RUN pnpm --filter=api build
+
+# Production image
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install only production dependencies
+COPY package*.json ./
+COPY pnpm-workspace.yaml ./
+RUN npm install -g pnpm@8 && \
+    pnpm install --frozen-lockfile --prod && \
+    pnpm prune --prod
+
+# Copy built app from builder
+COPY --from=builder /app/apps/api/dist ./dist
+COPY --from=builder /app/apps/api/package.json ./
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+# Security: Run as non-root
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+USER nodejs
+
+# Metadata
+LABEL org.opencontainers.image.title="Australian Property Intelligence Platform - API"
+LABEL org.opencontainers.image.description="Enterprise API Gateway with advanced rate limiting"
+LABEL org.opencontainers.image.version="1.0.0"
+
+EXPOSE 3000
+
+CMD ["node", "dist/main.js"]
