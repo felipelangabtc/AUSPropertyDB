@@ -56,7 +56,7 @@ export default function WebhooksAdminPage() {
               <tr key={d.id} className="border-t">
                 <td className="py-2">{d.id}</td>
                 <td className="py-2">{d.event}</td>
-                <td className="py-2">{d.target_url || d.targetUrl}</td>
+                <td className="py-2">{d.target_url}</td>
                 <td className="py-2">{d.status}</td>
                 <td className="py-2">{d.attempts}</td>
                 <td className="py-2">{new Date(d.created_at).toLocaleString()}</td>
