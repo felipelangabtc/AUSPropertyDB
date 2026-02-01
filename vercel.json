@@ -2,7 +2,7 @@
   "version": 2,
   "buildCommand": "npm run build",
   "installCommand": "npm install --no-audit --no-fund",
-  "outputDirectory": "apps/web/.next",
+  "outputDirectory": ".next",
   "regions": ["syd1"],
   "env": {
     "NODE_ENV": "production",
