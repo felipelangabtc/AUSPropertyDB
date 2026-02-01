@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "pnpm build --filter=web",
-  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --no-audit --no-fund",
   "outputDirectory": "apps/web/.next",
   "regions": ["syd1"],
   "env": {
