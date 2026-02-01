@@ -1,19 +1,29 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   productionBrowserSourceMaps: false,
   compress: true,
   poweredByHeader: false,
   generateEtags: true,
 
-  // Otimizações de imagem
   images: {
-    domains: [
-      'images.unsplash.com',
-      'via.placeholder.com',
-      'cdn.ausproperty.app',
-      'storage.googleapis.com',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.ausproperty.app',
+      },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      },
     ],
     unoptimized: process.env.NODE_ENV === 'development',
     formats: ['image/avif', 'image/webp'],
@@ -46,18 +56,8 @@ const nextConfig = {
     NEXT_PUBLIC_APP_VERSION: '1.0.0',
   },
 
-  // Webpack otimizações
-  webpack: (config, { dev }) => {
-    if (!dev) {
-      config.optimization.usedExports = true;
-    }
-    return config;
-  },
-
-  // Experimental features
-  experimental: {
-    optimizePackageImports: ['@mui/material', 'react-icons'],
-  },
+  // Turbopack config (empty to use defaults)
+  turbopack: {},
 };
 
 export default nextConfig;
