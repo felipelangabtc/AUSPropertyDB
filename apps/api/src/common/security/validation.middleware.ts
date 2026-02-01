@@ -10,7 +10,7 @@ export interface ValidationRule {
 
 /**
  * Input Validation Middleware
- * 
+ *
  * Protects against:
  * - SQL Injection
  * - XSS (Cross-Site Scripting)
@@ -18,7 +18,7 @@ export interface ValidationRule {
  * - Command Injection
  * - XXE (XML External Entity)
  * - Prototype Pollution
- * 
+ *
  * Sanitizes all inputs:
  * - Query parameters
  * - Request body

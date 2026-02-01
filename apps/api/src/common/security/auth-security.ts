@@ -432,8 +432,6 @@ export class PasswordSecurityUtils {
       'welcome',
     ];
 
-    return commonPasswords.some(
-      (common) => password.toLowerCase() === common
-    );
+    return commonPasswords.some((common) => password.toLowerCase() === common);
   }
 }

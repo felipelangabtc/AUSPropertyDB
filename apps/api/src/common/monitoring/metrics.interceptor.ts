@@ -40,13 +40,18 @@ export class MetricsInterceptor implements NestInterceptor {
           const resSize = Buffer.byteLength(JSON.stringify(data));
 
           // Record metrics
-          this.metricsService.recordHttpRequest(method, endpoint, status, duration, Number(reqSize), resSize);
+          this.metricsService.recordHttpRequest(
+            method,
+            endpoint,
+            status,
+            duration,
+            Number(reqSize),
+            resSize
+          );
 
           // Log slow requests
           if (duration > 1000) {
-            this.logger.warn(
-              `Slow request: ${method} ${endpoint} - ${duration}ms`,
-            );
+            this.logger.warn(`Slow request: ${method} ${endpoint} - ${duration}ms`);
           }
         },
         (error) => {
@@ -55,14 +60,19 @@ export class MetricsInterceptor implements NestInterceptor {
           const status = response.statusCode || 500;
 
           // Record metrics for error
-          this.metricsService.recordHttpRequest(method, endpoint, status, duration, Number(reqSize), 0);
+          this.metricsService.recordHttpRequest(
+            method,
+            endpoint,
+            status,
+            duration,
+            Number(reqSize),
+            0
+          );
 
           // Log error
-          this.logger.error(
-            `Request error: ${method} ${endpoint} - ${status} - ${error.message}`,
-          );
-        },
-      ),
+          this.logger.error(`Request error: ${method} ${endpoint} - ${status} - ${error.message}`);
+        }
+      )
     );
   }
 }

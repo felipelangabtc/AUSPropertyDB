@@ -260,14 +260,7 @@ describe('Monitoring - Phase 4.6', () => {
     it('should aggregate HTTP metrics', () => {
       // Record multiple requests
       for (let i = 0; i < 5; i++) {
-        metricsService.recordHttpRequest(
-          'GET',
-          '/api/properties',
-          200,
-          50 + i * 10,
-          0,
-          1024,
-        );
+        metricsService.recordHttpRequest('GET', '/api/properties', 200, 50 + i * 10, 0, 1024);
       }
 
       const metrics = metricsService.getMetrics();
@@ -321,14 +314,7 @@ describe('Monitoring - Phase 4.6', () => {
     it('should support high cardinality metrics', () => {
       // Record metrics for 100 different endpoints
       for (let i = 0; i < 100; i++) {
-        metricsService.recordHttpRequest(
-          'GET',
-          `/api/endpoint${i}`,
-          200,
-          50,
-          0,
-          1024,
-        );
+        metricsService.recordHttpRequest('GET', `/api/endpoint${i}`, 200, 50, 0, 1024);
       }
 
       const metrics = metricsService.getMetrics();
@@ -348,17 +334,14 @@ describe('Monitoring - Phase 4.6', () => {
     it('should support alert severity levels', () => {
       const severities = new Set();
 
-      [
-        'High CPU Usage',
-        'Critical CPU Usage',
-        'High Memory Usage',
-        'High Error Rate',
-      ].forEach((ruleName) => {
-        const rule = alertingService.getAlertRule(ruleName);
-        if (rule) {
-          severities.add(rule.severity);
+      ['High CPU Usage', 'Critical CPU Usage', 'High Memory Usage', 'High Error Rate'].forEach(
+        (ruleName) => {
+          const rule = alertingService.getAlertRule(ruleName);
+          if (rule) {
+            severities.add(rule.severity);
+          }
         }
-      });
+      );
 
       expect(severities.has('warning')).toBe(true);
       expect(severities.has('critical')).toBe(true);

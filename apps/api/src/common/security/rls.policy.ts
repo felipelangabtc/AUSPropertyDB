@@ -18,12 +18,12 @@ export interface TenantContext {
 
 /**
  * Row-Level Security (RLS) Policy Manager
- * 
+ *
  * Implements PostgreSQL Row-Level Security policies to enforce:
  * - Tenant isolation (users see only their data)
  * - User-based access control (RBAC)
  * - Organization boundaries
- * 
+ *
  * Features:
  * - Automatic tenant filtering
  * - Role-based row access
@@ -37,7 +37,7 @@ export class RLSPolicyService {
 
   /**
    * PostgreSQL RLS policies for tenant and user isolation
-   * 
+   *
    * These policies ensure that:
    * 1. Users can only see their own organization's data
    * 2. Users can only modify their own organization's data
@@ -63,7 +63,7 @@ export class RLSPolicyService {
       role: 'authenticated',
       action: 'UPDATE',
       expression: `id = current_setting('app.current_user_id')::uuid OR
-                   (organization_id = current_setting('app.current_organization_id')::uuid 
+                   (organization_id = current_setting('app.current_organization_id')::uuid
                     AND current_setting('app.current_user_role') = 'admin')`,
       description: 'Users can update their own profile or org admins can update org users',
     },
@@ -115,7 +115,7 @@ export class RLSPolicyService {
       action: 'SELECT',
       expression: `
         property_id IN (
-          SELECT id FROM properties 
+          SELECT id FROM properties
           WHERE organization_id = current_setting('app.current_organization_id')::uuid
         )
       `,
@@ -195,7 +195,7 @@ export class RLSPolicyService {
       action: 'SELECT',
       expression: `
         property_id IN (
-          SELECT id FROM properties 
+          SELECT id FROM properties
           WHERE organization_id = current_setting('app.current_organization_id')::uuid
         )
       `,
@@ -208,7 +208,7 @@ export class RLSPolicyService {
       action: 'INSERT',
       expression: `
         property_id IN (
-          SELECT id FROM properties 
+          SELECT id FROM properties
           WHERE organization_id = current_setting('app.current_organization_id')::uuid
         )
       `,
@@ -339,11 +339,7 @@ ORDER BY tablename;
    * Validate RLS context (check if all required settings are present)
    */
   validateRLSContext(context: TenantContext): boolean {
-    return (
-      !!context.userId &&
-      !!context.organizationId &&
-      context.roles.length > 0
-    );
+    return !!context.userId && !!context.organizationId && context.roles.length > 0;
   }
 
   /**
@@ -382,9 +378,7 @@ ORDER BY tablename;
 
     this.logger.log(`RLS Policies for table '${tableName}':`);
     policies.forEach((policy) => {
-      this.logger.debug(
-        `  - [${policy.action}] ${policy.name}: ${policy.description}`
-      );
+      this.logger.debug(`  - [${policy.action}] ${policy.name}: ${policy.description}`);
     });
   }
 

@@ -14,7 +14,7 @@ import { AlertingService, AlertRule } from './alerting.service';
 export class MonitoringController {
   constructor(
     private readonly metricsService: PrometheusMetricsService,
-    private readonly alertingService: AlertingService,
+    private readonly alertingService: AlertingService
   ) {}
 
   /**

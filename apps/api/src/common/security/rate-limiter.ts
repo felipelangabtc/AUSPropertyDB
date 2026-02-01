@@ -219,7 +219,10 @@ export class RateLimiterService {
    * const status = this.getStatus('user:123', config);
    * // Returns: { remaining: 450, limit: 500, resetTime: 1234567890 }
    */
-  getStatus(key: string, config: RateLimitConfig): {
+  getStatus(
+    key: string,
+    config: RateLimitConfig
+  ): {
     remaining: number;
     limit: number;
     resetTime: number;
@@ -355,9 +358,17 @@ export class RateLimiterService {
       case 'free':
         return { ...baseConfig, maxRequests: 10, keyGenerator: (req) => `free:${req.ip}` };
       case 'premium':
-        return { ...baseConfig, maxRequests: 500, keyGenerator: (req) => `premium:${req.user?.id}` };
+        return {
+          ...baseConfig,
+          maxRequests: 500,
+          keyGenerator: (req) => `premium:${req.user?.id}`,
+        };
       case 'enterprise':
-        return { ...baseConfig, maxRequests: 10000, keyGenerator: (req) => `enterprise:${req.user?.id}` };
+        return {
+          ...baseConfig,
+          maxRequests: 10000,
+          keyGenerator: (req) => `enterprise:${req.user?.id}`,
+        };
       default:
         return this.configs.global;
     }

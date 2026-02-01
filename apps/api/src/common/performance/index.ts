@@ -4,7 +4,14 @@
  * CDN, image optimization, query profiling, and resource monitoring
  */
 
-export { CDNConfigService, CDNConfig, CacheControl, OriginSettings, CompressionUtils, MinificationUtils } from './cdn.config';
+export {
+  CDNConfigService,
+  CDNConfig,
+  CacheControl,
+  OriginSettings,
+  CompressionUtils,
+  MinificationUtils,
+} from './cdn.config';
 
 export {
   ImageOptimizerService,
@@ -22,10 +29,7 @@ export {
   ResourceMonitorService,
 } from './query-profiler';
 
-export {
-  CompressionMiddleware,
-  ResponseCompressionInterceptor,
-} from './compression.middleware';
+export { CompressionMiddleware, ResponseCompressionInterceptor } from './compression.middleware';
 
 /**
  * Performance Services Registry

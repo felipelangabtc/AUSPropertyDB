@@ -130,9 +130,7 @@ export class TLSConfigService {
 
       if (this.certificateInfo) {
         this.logger.log(`Certificate loaded: ${this.certificateInfo.subject}`);
-        this.logger.log(
-          `Certificate expires: ${this.certificateInfo.validTo.toISOString()}`
-        );
+        this.logger.log(`Certificate expires: ${this.certificateInfo.validTo.toISOString()}`);
 
         if (this.certificateInfo.daysUntilExpiration < 30) {
           this.logger.warn(
@@ -189,7 +187,9 @@ export class TLSConfigService {
 
     // Alert if certificate expires in less than 7 days
     if (this.certificateInfo.daysUntilExpiration < 7) {
-      this.logger.error(`CRITICAL: Certificate expires in ${this.certificateInfo.daysUntilExpiration} days - IMMEDIATE RENEWAL REQUIRED`);
+      this.logger.error(
+        `CRITICAL: Certificate expires in ${this.certificateInfo.daysUntilExpiration} days - IMMEDIATE RENEWAL REQUIRED`
+      );
     }
   }
 

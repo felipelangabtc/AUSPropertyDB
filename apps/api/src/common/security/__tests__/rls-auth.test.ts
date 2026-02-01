@@ -339,9 +339,7 @@ describe('PasswordSecurityUtils', () => {
       const result = PasswordSecurityUtils.isStrong(password);
 
       expect(result.isStrong).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.stringContaining('12 characters')
-      );
+      expect(result.errors).toContainEqual(expect.stringContaining('12 characters'));
     });
 
     it('should reject passwords without uppercase', () => {
@@ -349,9 +347,7 @@ describe('PasswordSecurityUtils', () => {
       const result = PasswordSecurityUtils.isStrong(password);
 
       expect(result.isStrong).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.stringContaining('uppercase')
-      );
+      expect(result.errors).toContainEqual(expect.stringContaining('uppercase'));
     });
 
     it('should reject passwords without lowercase', () => {
@@ -375,9 +371,7 @@ describe('PasswordSecurityUtils', () => {
       const result = PasswordSecurityUtils.isStrong(password);
 
       expect(result.isStrong).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.stringContaining('special character')
-      );
+      expect(result.errors).toContainEqual(expect.stringContaining('special character'));
     });
   });
 
@@ -389,9 +383,7 @@ describe('PasswordSecurityUtils', () => {
     });
 
     it('should allow unique passwords', () => {
-      expect(
-        PasswordSecurityUtils.isCommonPassword('Unique@Pass2024#')
-      ).toBe(false);
+      expect(PasswordSecurityUtils.isCommonPassword('Unique@Pass2024#')).toBe(false);
     });
   });
 });

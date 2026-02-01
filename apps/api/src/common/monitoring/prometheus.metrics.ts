@@ -207,7 +207,14 @@ export class PrometheusMetricsService {
   /**
    * Record HTTP request
    */
-  recordHttpRequest(method: string, endpoint: string, status: number, durationMs: number, reqSize: number, resSize: number) {
+  recordHttpRequest(
+    method: string,
+    endpoint: string,
+    status: number,
+    durationMs: number,
+    reqSize: number,
+    resSize: number
+  ) {
     this.httpRequestTotal.labels(method, String(status), endpoint).inc();
     this.httpRequestDuration.labels(method, String(status), endpoint).observe(durationMs / 1000);
     this.httpRequestSize.set({ method, endpoint }, reqSize);
@@ -247,8 +254,14 @@ export class PrometheusMetricsService {
    * Update cache hit rate
    */
   private updateCacheHitRate(level: string) {
-    const hits = this.cacheHits.get().values.filter((v) => v.labels.cache_level === level).reduce((a, b) => a + b.value, 0);
-    const misses = this.cacheMisses.get().values.filter((v) => v.labels.cache_level === level).reduce((a, b) => a + b.value, 0);
+    const hits = this.cacheHits
+      .get()
+      .values.filter((v) => v.labels.cache_level === level)
+      .reduce((a, b) => a + b.value, 0);
+    const misses = this.cacheMisses
+      .get()
+      .values.filter((v) => v.labels.cache_level === level)
+      .reduce((a, b) => a + b.value, 0);
     const total = hits + misses;
     const rate = total > 0 ? hits / total : 0;
     this.cacheHitRate.set({ cache_level: level }, rate);
@@ -302,7 +315,13 @@ export class PrometheusMetricsService {
   /**
    * Record system metrics
    */
-  recordSystemMetrics(cpuPercent: number, memoryHeapUsed: number, memoryHeapTotal: number, memoryExternal: number, lagMs: number) {
+  recordSystemMetrics(
+    cpuPercent: number,
+    memoryHeapUsed: number,
+    memoryHeapTotal: number,
+    memoryExternal: number,
+    lagMs: number
+  ) {
     this.cpuUsage.set(cpuPercent);
     this.memoryUsage.set({ type: 'heap_used' }, memoryHeapUsed);
     this.memoryUsage.set({ type: 'heap_total' }, memoryHeapTotal);

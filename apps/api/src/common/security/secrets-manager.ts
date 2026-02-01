@@ -120,10 +120,7 @@ export class SecretsManagerService {
   /**
    * Get secret from AWS Secrets Manager
    */
-  private async getFromAWSSecretsManager(
-    secretName: string,
-    version?: string
-  ): Promise<string> {
+  private async getFromAWSSecretsManager(secretName: string, version?: string): Promise<string> {
     try {
       // AWS SDK v3 would be used in production
       // This is a placeholder for demonstration
@@ -195,11 +192,7 @@ export class SecretsManagerService {
     // Vault API implementation
   }
 
-  private async storeInLocal(
-    secretName: string,
-    value: string,
-    ttl?: number
-  ): Promise<void> {
+  private async storeInLocal(secretName: string, value: string, ttl?: number): Promise<void> {
     // Local storage implementation
   }
 
@@ -244,8 +237,7 @@ export class SecretsManagerService {
 
   private generateDatabasePassword(): string {
     // Generate a secure database password
-    const chars =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
     let password = '';
     for (let i = 0; i < 32; i++) {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -360,15 +352,7 @@ export class SecretsUtils {
    * Check if value looks like a secret (password, API key, token)
    */
   static isLikelySecret(name: string): boolean {
-    const patterns = [
-      'password',
-      'secret',
-      'token',
-      'key',
-      'credential',
-      'api_key',
-      'auth',
-    ];
+    const patterns = ['password', 'secret', 'token', 'key', 'credential', 'api_key', 'auth'];
 
     return patterns.some((pattern) => name.toLowerCase().includes(pattern));
   }

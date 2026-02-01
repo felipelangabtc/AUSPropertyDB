@@ -103,9 +103,7 @@ describe('Performance Tuning - Phase 4.5', () => {
     });
 
     it('should generate LQIP placeholder', async () => {
-      const lqip = await imageOptimizer.generateLQIP(
-        'https://example.com/image.jpg'
-      );
+      const lqip = await imageOptimizer.generateLQIP('https://example.com/image.jpg');
 
       expect(lqip).toBeDefined();
       expect(lqip).toContain('data:image');
@@ -221,9 +219,7 @@ describe('Performance Tuning - Phase 4.5', () => {
       expect(stats.count).toBe(5);
       expect(stats.avgExecutionTime).toBeGreaterThan(0);
       expect(stats.minExecutionTime).toBeGreaterThan(0);
-      expect(stats.maxExecutionTime).toBeGreaterThanOrEqual(
-        stats.minExecutionTime
-      );
+      expect(stats.maxExecutionTime).toBeGreaterThanOrEqual(stats.minExecutionTime);
     });
   });
 
@@ -296,9 +292,7 @@ describe('Performance Tuning - Phase 4.5', () => {
       expect(profile.executionTime).toBeGreaterThanOrEqual(0);
 
       // Optimize image
-      const lqip = await imageOptimizer.generateLQIP(
-        'https://example.com/image.jpg'
-      );
+      const lqip = await imageOptimizer.generateLQIP('https://example.com/image.jpg');
       expect(lqip).toBeDefined();
 
       // Set CDN headers

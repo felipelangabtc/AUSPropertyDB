@@ -24,7 +24,7 @@ export interface FieldEncryptionSchema {
 
 /**
  * Enterprise-grade encryption service for sensitive data
- * 
+ *
  * Features:
  * - AES-256-GCM encryption (AEAD cipher)
  * - PBKDF2 key derivation with salt
@@ -393,9 +393,7 @@ export class EncryptionService {
     }
 
     if (this.config.iterations < 100000) {
-      this.logger.warn(
-        'PBKDF2_ITERATIONS is less than 100,000 - recommended minimum for security'
-      );
+      this.logger.warn('PBKDF2_ITERATIONS is less than 100,000 - recommended minimum for security');
     }
   }
 }
@@ -437,9 +435,27 @@ export class EncryptionUtils {
     masterKey: Buffer,
     salt: Buffer
   ): { encryptionKey: Buffer; authKey: Buffer; indexKey: Buffer } {
-    const encryptionKey = crypto.pbkdf2Sync(masterKey, Buffer.concat([salt, Buffer.from('enc')]), 100000, 32, 'sha256');
-    const authKey = crypto.pbkdf2Sync(masterKey, Buffer.concat([salt, Buffer.from('auth')]), 100000, 32, 'sha256');
-    const indexKey = crypto.pbkdf2Sync(masterKey, Buffer.concat([salt, Buffer.from('idx')]), 100000, 32, 'sha256');
+    const encryptionKey = crypto.pbkdf2Sync(
+      masterKey,
+      Buffer.concat([salt, Buffer.from('enc')]),
+      100000,
+      32,
+      'sha256'
+    );
+    const authKey = crypto.pbkdf2Sync(
+      masterKey,
+      Buffer.concat([salt, Buffer.from('auth')]),
+      100000,
+      32,
+      'sha256'
+    );
+    const indexKey = crypto.pbkdf2Sync(
+      masterKey,
+      Buffer.concat([salt, Buffer.from('idx')]),
+      100000,
+      32,
+      'sha256'
+    );
 
     return { encryptionKey, authKey, indexKey };
   }

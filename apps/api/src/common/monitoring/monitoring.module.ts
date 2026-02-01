@@ -13,17 +13,9 @@ import { MetricsInterceptor } from './metrics.interceptor';
  * - Health checks and dashboards
  */
 @Module({
-  providers: [
-    PrometheusMetricsService,
-    AlertingService,
-    MetricsInterceptor,
-  ],
+  providers: [PrometheusMetricsService, AlertingService, MetricsInterceptor],
   controllers: [MonitoringController],
-  exports: [
-    PrometheusMetricsService,
-    AlertingService,
-    MetricsInterceptor,
-  ],
+  exports: [PrometheusMetricsService, AlertingService, MetricsInterceptor],
 })
 export class MonitoringModule {}
 

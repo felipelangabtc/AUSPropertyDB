@@ -13,10 +13,7 @@ export { MonitoringModule } from './monitoring.module';
 /**
  * Monitoring Services Registry
  */
-export const MONITORING_SERVICES = [
-  'PrometheusMetricsService',
-  'AlertingService',
-];
+export const MONITORING_SERVICES = ['PrometheusMetricsService', 'AlertingService'];
 
 /**
  * Monitoring Middleware & Interceptors

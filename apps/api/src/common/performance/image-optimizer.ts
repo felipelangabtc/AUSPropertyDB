@@ -139,7 +139,16 @@ export class ImageOptimizerService {
       case 'cloudinary':
         return this.optimizeWithCloudinary(imageUrl, context);
       default:
-        return { original: imageUrl, thumbnail: [], small: [], medium: [], large: [], webp: [], avif: [], lazyLoadPlaceholder: '' };
+        return {
+          original: imageUrl,
+          thumbnail: [],
+          small: [],
+          medium: [],
+          large: [],
+          webp: [],
+          avif: [],
+          lazyLoadPlaceholder: '',
+        };
     }
   }
 
@@ -319,14 +328,7 @@ export class ImageOptimizerService {
    * Generate Cloudinary LQIP
    */
   private generateCloudinaryLQIP(imageUrl: string): string {
-    const transformation = [
-      'w_10',
-      'q_30',
-      'e_blur:300',
-      'f_auto',
-      'c_fill',
-      'g_auto',
-    ].join('/');
+    const transformation = ['w_10', 'q_30', 'e_blur:300', 'f_auto', 'c_fill', 'g_auto'].join('/');
 
     return `https://res.cloudinary.com/${this.config.apiKey}/image/upload/${transformation}/${imageUrl}`;
   }
@@ -365,8 +367,8 @@ export class ImageOptimizerService {
       <picture>
         <source srcset="${optimized.avif.map((v) => `${v.url} ${v.width}w`).join(', ')}" type="image/avif">
         <source srcset="${optimized.webp.map((v) => `${v.url} ${v.width}w`).join(', ')}" type="image/webp">
-        <img 
-          src="${optimized.original}" 
+        <img
+          src="${optimized.original}"
           srcset="${this.generateSrcset(optimized)}"
           alt="${alt}"
           loading="lazy"
