@@ -4,11 +4,11 @@
  */
 
 export interface PoolConfig {
-  min: number;           // Minimum connections
-  max: number;           // Maximum connections
-  idleTimeout: number;   // Idle connection timeout (ms)
+  min: number; // Minimum connections
+  max: number; // Maximum connections
+  idleTimeout: number; // Idle connection timeout (ms)
   acquireTimeout: number; // Time to acquire connection (ms)
-  reapInterval: number;  // Reap interval (ms)
+  reapInterval: number; // Reap interval (ms)
 }
 
 /**
@@ -159,7 +159,7 @@ export class PoolMonitor {
     idle: number,
     waiting: number = 0,
     avgWaitMs: number = 0,
-    maxWaitMs: number = 0,
+    maxWaitMs: number = 0
   ): void {
     this.metrics.activeConnections = active;
     this.metrics.idleConnections = idle;
@@ -167,9 +167,8 @@ export class PoolMonitor {
     this.metrics.waitingRequests = waiting;
     this.metrics.avgWaitTime = avgWaitMs;
     this.metrics.maxWaitTime = maxWaitMs;
-    this.metrics.utilizationPercent = this.metrics.totalConnections > 0
-      ? (active / this.metrics.totalConnections) * 100
-      : 0;
+    this.metrics.utilizationPercent =
+      this.metrics.totalConnections > 0 ? (active / this.metrics.totalConnections) * 100 : 0;
   }
 
   /**
@@ -253,41 +252,40 @@ export class PoolRecommendations {
   /**
    * Generate recommendations based on metrics and config
    */
-  static generateRecommendations(
-    config: PoolConfig,
-    metrics: PoolMetrics,
-  ): string[] {
+  static generateRecommendations(config: PoolConfig, metrics: PoolMetrics): string[] {
     const recommendations: string[] = [];
 
     // Check if pool size is appropriate
     if (metrics.utilizationPercent > 80) {
       recommendations.push(
-        `Increase max pool size from ${config.max} to ${Math.ceil(config.max * 1.5)}`,
+        `Increase max pool size from ${config.max} to ${Math.ceil(config.max * 1.5)}`
       );
     }
 
     if (metrics.utilizationPercent < 20 && config.max > config.min * 2) {
       recommendations.push(
-        `Reduce max pool size from ${config.max} to ${Math.ceil(config.max * 0.7)} to save resources`,
+        `Reduce max pool size from ${config.max} to ${Math.ceil(config.max * 0.7)} to save resources`
       );
     }
 
     // Check idle timeout
     if (metrics.idleConnections > config.max * 0.7) {
       recommendations.push(
-        `Many idle connections, consider reducing idleTimeout from ${config.idleTimeout}ms`,
+        `Many idle connections, consider reducing idleTimeout from ${config.idleTimeout}ms`
       );
     }
 
     // Check wait times
     if (metrics.avgWaitTime > 100) {
-      recommendations.push('High average wait time, consider optimizing queries or increasing pool size');
+      recommendations.push(
+        'High average wait time, consider optimizing queries or increasing pool size'
+      );
     }
 
     // Check connection errors
     if (metrics.connectionErrors > 0) {
       recommendations.push(
-        `Connection errors detected (${metrics.connectionErrors}), check database availability`,
+        `Connection errors detected (${metrics.connectionErrors}), check database availability`
       );
     }
 
@@ -309,15 +307,12 @@ export interface PrismaPoolConfig {
 /**
  * Generate Prisma DATABASE_URL with pool settings
  */
-export function generatePrismaConnectionString(
-  baseUrl: string,
-  poolConfig: PoolConfig,
-): string {
+export function generatePrismaConnectionString(baseUrl: string, poolConfig: PoolConfig): string {
   // PostgreSQL connection string format:
   // postgresql://user:password@host:port/database?pool_size=10&idle_in_transaction_session_timeout=60000
-  
+
   const url = new URL(baseUrl);
-  
+
   url.searchParams.set('connection_limit', poolConfig.max.toString());
   url.searchParams.set('pool_timeout', (poolConfig.acquireTimeout / 1000).toString());
   url.searchParams.set('idle_in_transaction_session_timeout', poolConfig.idleTimeout.toString());
@@ -339,7 +334,7 @@ export const POOL_HEALTH_CHECKS = {
    * Check active connections
    */
   activeConnections: `
-    SELECT count(*) FROM pg_stat_activity 
+    SELECT count(*) FROM pg_stat_activity
     WHERE state = 'active' AND pid <> pg_backend_pid()
   `,
 
@@ -347,7 +342,7 @@ export const POOL_HEALTH_CHECKS = {
    * Check connection limits
    */
   connectionLimits: `
-    SELECT 
+    SELECT
       datname,
       numbackends as current_connections,
       datconnlimit as max_connections
@@ -359,7 +354,7 @@ export const POOL_HEALTH_CHECKS = {
    * Check for idle transactions
    */
   idleTransactions: `
-    SELECT count(*) FROM pg_stat_activity 
+    SELECT count(*) FROM pg_stat_activity
     WHERE state = 'idle in transaction'
   `,
 

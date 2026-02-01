@@ -41,7 +41,7 @@ export class DatabaseOptimizationService {
   async analyzeSlowestQueries(limit: number = 20): Promise<QueryMetrics[]> {
     try {
       const queries = await this.prisma.$queryRaw`
-        SELECT 
+        SELECT
           query,
           calls,
           total_time,
@@ -70,9 +70,7 @@ export class DatabaseOptimizationService {
    */
   async getExecutionPlan(query: string): Promise<any> {
     try {
-      const plan = await this.prisma.$queryRawUnsafe(
-        `EXPLAIN ANALYZE ${query}`,
-      );
+      const plan = await this.prisma.$queryRawUnsafe(`EXPLAIN ANALYZE ${query}`);
 
       return plan;
     } catch (error) {
@@ -166,7 +164,7 @@ export class DatabaseOptimizationService {
   async analyzeMissingIndexes(): Promise<IndexRecommendation[]> {
     try {
       const missingIndexes = await this.prisma.$queryRaw`
-        SELECT 
+        SELECT
           schemaname,
           tablename,
           attname,
@@ -198,7 +196,7 @@ export class DatabaseOptimizationService {
   async getIndexUsageStats(): Promise<any[]> {
     try {
       const stats = await this.prisma.$queryRaw`
-        SELECT 
+        SELECT
           schemaname,
           tablename,
           indexname,
@@ -223,7 +221,7 @@ export class DatabaseOptimizationService {
   async findUnusedIndexes(): Promise<any[]> {
     try {
       const unused = await this.prisma.$queryRaw`
-        SELECT 
+        SELECT
           schemaname,
           tablename,
           indexname,
@@ -248,7 +246,7 @@ export class DatabaseOptimizationService {
   async getTableStats(): Promise<any[]> {
     try {
       const stats = await this.prisma.$queryRaw`
-        SELECT 
+        SELECT
           schemaname,
           tablename,
           n_live_tup as live_rows,
@@ -274,7 +272,7 @@ export class DatabaseOptimizationService {
   async findTablesNeedingMaintenance(): Promise<any[]> {
     try {
       const tables = await this.prisma.$queryRaw`
-        SELECT 
+        SELECT
           schemaname,
           tablename,
           n_dead_tup as dead_rows,
@@ -300,7 +298,7 @@ export class DatabaseOptimizationService {
   async getConnectionPoolStats(): Promise<any> {
     try {
       const stats = await this.prisma.$queryRaw`
-        SELECT 
+        SELECT
           datname,
           numbackends as connections,
           pg_database.datconnlimit as max_connections
@@ -333,10 +331,7 @@ export class DatabaseOptimizationService {
       return {
         complexity: 'HIGH',
         reason: 'Uses sequential table scan (no index)',
-        recommendations: [
-          'Add appropriate index',
-          'Consider composite index for filter columns',
-        ],
+        recommendations: ['Add appropriate index', 'Consider composite index for filter columns'],
       };
     }
 

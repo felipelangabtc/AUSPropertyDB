@@ -148,7 +148,7 @@ export const DATABASE_INDEXES = {
     },
     {
       name: 'idx_webhook_deliveries_failed',
-      sql: 'CREATE INDEX IF NOT EXISTS idx_webhook_deliveries_failed ON webhook_deliveries(webhook_id, status, created_at DESC) WHERE status = \'FAILED\';',
+      sql: "CREATE INDEX IF NOT EXISTS idx_webhook_deliveries_failed ON webhook_deliveries(webhook_id, status, created_at DESC) WHERE status = 'FAILED';",
       purpose: 'Find failed deliveries',
       priority: 'LOW',
     },
@@ -178,16 +178,16 @@ export const DATABASE_INDEXES = {
   performance_indexes: [
     {
       name: 'idx_properties_suburb_price_active',
-      sql: `CREATE INDEX IF NOT EXISTS idx_properties_suburb_price_active 
-            ON properties(suburb, price) 
+      sql: `CREATE INDEX IF NOT EXISTS idx_properties_suburb_price_active
+            ON properties(suburb, price)
             WHERE deleted_at IS NULL;`,
       purpose: 'Active properties only',
       priority: 'HIGH',
     },
     {
       name: 'idx_price_history_recent',
-      sql: `CREATE INDEX IF NOT EXISTS idx_price_history_recent 
-            ON price_history(property_id, created_at DESC) 
+      sql: `CREATE INDEX IF NOT EXISTS idx_price_history_recent
+            ON price_history(property_id, created_at DESC)
             WHERE created_at > NOW() - INTERVAL '1 year';`,
       purpose: 'Recent price history',
       priority: 'MEDIUM',
@@ -202,10 +202,10 @@ export function generateIndexMigration(): string {
   const allIndexes = Object.values(DATABASE_INDEXES).flat();
 
   const statements = allIndexes
-    .sort((a, b) => (
-      { HIGH: 0, MEDIUM: 1, LOW: 2 } [a.priority] -
-      { HIGH: 0, MEDIUM: 1, LOW: 2 } [b.priority]
-    ))
+    .sort(
+      (a, b) =>
+        ({ HIGH: 0, MEDIUM: 1, LOW: 2 })[a.priority] - { HIGH: 0, MEDIUM: 1, LOW: 2 }[b.priority]
+    )
     .map((idx) => `-- ${idx.purpose}\n${idx.sql}`)
     .join('\n\n');
 
@@ -240,8 +240,8 @@ export const INDEX_STATISTICS = {
    */
   monitoring: {
     index_usage: `
-      SELECT 
-        schemaname, tablename, indexname, 
+      SELECT
+        schemaname, tablename, indexname,
         idx_scan, idx_tup_read, idx_tup_fetch
       FROM pg_stat_user_indexes
       ORDER BY idx_scan DESC
@@ -249,7 +249,7 @@ export const INDEX_STATISTICS = {
     `,
 
     unused_indexes: `
-      SELECT 
+      SELECT
         schemaname, tablename, indexname,
         pg_size_pretty(pg_relation_size(indexrelid)) as size
       FROM pg_stat_user_indexes
@@ -258,7 +258,7 @@ export const INDEX_STATISTICS = {
     `,
 
     index_size: `
-      SELECT 
+      SELECT
         tablename, indexname,
         pg_size_pretty(pg_relation_size(indexrelid)) as size
       FROM pg_stat_user_indexes
@@ -266,7 +266,7 @@ export const INDEX_STATISTICS = {
     `,
 
     missing_indexes: `
-      SELECT 
+      SELECT
         schemaname, tablename, attname,
         n_distinct, correlation
       FROM pg_stats

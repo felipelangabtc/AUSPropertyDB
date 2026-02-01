@@ -40,12 +40,12 @@ export const QUERY_OPTIMIZATION_TECHNIQUES = {
    */
   subqueries: {
     bad: `
-      SELECT p.id FROM properties p 
+      SELECT p.id FROM properties p
       WHERE price > (SELECT AVG(price) FROM properties)
     `,
     good: `
-      SELECT p.id FROM properties p 
-      JOIN (SELECT AVG(price) as avg_price FROM properties) avg 
+      SELECT p.id FROM properties p
+      JOIN (SELECT AVG(price) as avg_price FROM properties) avg
       ON p.price > avg.avg_price
     `,
     benefit: 'Better execution plan',
@@ -56,11 +56,11 @@ export const QUERY_OPTIMIZATION_TECHNIQUES = {
    */
   joins: {
     bad: `
-      SELECT id FROM properties 
+      SELECT id FROM properties
       WHERE id IN (SELECT property_id FROM listings)
     `,
     good: `
-      SELECT DISTINCT p.id FROM properties p 
+      SELECT DISTINCT p.id FROM properties p
       JOIN listings l ON p.id = l.property_id
     `,
     benefit: 'Better query plan',
@@ -71,12 +71,12 @@ export const QUERY_OPTIMIZATION_TECHNIQUES = {
    */
   filtering: {
     bad: `
-      SELECT * FROM price_history 
-      JOIN properties ON price_history.property_id = properties.id 
+      SELECT * FROM price_history
+      JOIN properties ON price_history.property_id = properties.id
       WHERE properties.suburb = "Sydney"
     `,
     good: `
-      SELECT * FROM properties 
+      SELECT * FROM properties
       WHERE suburb = "Sydney"
       JOIN price_history ON properties.id = price_history.property_id
     `,
@@ -88,14 +88,14 @@ export const QUERY_OPTIMIZATION_TECHNIQUES = {
    */
   aggregation: {
     bad: `
-      SELECT suburb, COUNT(*) FROM properties 
-      GROUP BY suburb 
+      SELECT suburb, COUNT(*) FROM properties
+      GROUP BY suburb
       HAVING COUNT(*) > 100
     `,
     good: `
-      SELECT suburb, COUNT(*) as count FROM properties 
+      SELECT suburb, COUNT(*) as count FROM properties
       WHERE created_at > NOW() - INTERVAL 30 days
-      GROUP BY suburb 
+      GROUP BY suburb
       HAVING count > 100
     `,
     benefit: 'Processes fewer rows',
@@ -212,7 +212,7 @@ export class KeysetPagination {
     columns: string[],
     orderBy: string,
     pageSize: number,
-    cursor?: any,
+    cursor?: any
   ): string {
     let query = `SELECT ${columns.join(', ')} FROM ${table}`;
 
@@ -352,9 +352,7 @@ export class QueryAnalyzer {
 
     return {
       issues,
-      severity: Math.max(
-        severity === 'HIGH' ? 3 : severity === 'MEDIUM' ? 2 : 1,
-      ) as any,
+      severity: Math.max(severity === 'HIGH' ? 3 : severity === 'MEDIUM' ? 2 : 1) as any,
       recommendations,
     };
   }

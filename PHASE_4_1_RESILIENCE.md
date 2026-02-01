@@ -53,7 +53,7 @@ Implements exponential backoff with jitter for transient failures.
 
 #### Built-in Policies:
 - **FAST**: 3 retries, 100-1000ms delay
-- **STANDARD**: 5 retries, 500-10000ms delay  
+- **STANDARD**: 5 retries, 500-10000ms delay
 - **AGGRESSIVE**: 10 retries, 200-30000ms delay
 - **NONE**: No retries
 
@@ -343,7 +343,7 @@ export class MlService {
 ```typescript
 async getDatabaseStats() {
   const config = getServiceConfig('database');
-  
+
   return RetryInterceptor.executeWithRetry(
     () => this.db.query('SELECT ...'),
     config.retry

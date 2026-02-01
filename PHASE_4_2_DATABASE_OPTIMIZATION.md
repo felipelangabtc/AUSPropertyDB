@@ -215,20 +215,20 @@ CREATE INDEX idx_properties_suburb_price ON properties(suburb, price);
 CREATE INDEX idx_properties_geo ON properties(latitude, longitude);
 
 -- Price History
-CREATE INDEX idx_price_history_property_date 
+CREATE INDEX idx_price_history_property_date
   ON price_history(property_id, created_at DESC);
 
 -- Listings
-CREATE INDEX idx_listings_property_source 
+CREATE INDEX idx_listings_property_source
   ON listings(property_id, source);
 
 -- Searches
-CREATE INDEX idx_searches_user_date 
+CREATE INDEX idx_searches_user_date
   ON searches(user_id, created_at DESC);
 
 -- Active Records Only (Partial Index)
-CREATE INDEX idx_properties_active 
-  ON properties(suburb, price) 
+CREATE INDEX idx_properties_active
+  ON properties(suburb, price)
   WHERE deleted_at IS NULL;
 ```
 
@@ -298,7 +298,7 @@ pnpm db:migrate
 // Review and optimize slow queries
 for (const query of slowQueries) {
   const analysis = QueryAnalyzer.analyzeQuery(query);
-  
+
   if (analysis.severity === 'HIGH') {
     // Apply recommendations
   }
@@ -323,7 +323,7 @@ pnpm dev
 async getDatabaseHealth() {
   const monitor = new PoolMonitor();
   const tableStats = await optimizationService.getTableStats();
-  
+
   return {
     poolHealth: monitor.isHealthy(poolConfig),
     tableStats,
@@ -410,7 +410,7 @@ GET /admin/database/optimization-report
 // ✅ GOOD
 SELECT p.id, p.name, p.price
 FROM properties p
-WHERE p.suburb = 'Sydney' 
+WHERE p.suburb = 'Sydney'
   AND p.price BETWEEN 500000 AND 1000000
 ORDER BY p.created_at DESC
 LIMIT 20 OFFSET 0;
@@ -452,9 +452,9 @@ REINDEX DATABASE;
 CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
 
 // Query top slow queries regularly
-SELECT query, mean_time, calls 
-FROM pg_stat_statements 
-ORDER BY mean_time DESC 
+SELECT query, mean_time, calls
+FROM pg_stat_statements
+ORDER BY mean_time DESC
 LIMIT 10;
 ```
 
