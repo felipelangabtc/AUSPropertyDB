@@ -1,7 +1,7 @@
 # 🚀 Vercel Deployment Documentation Index
 
-**Status**: ✅ Projeto 100% preparado para Vercel  
-**Tempo estimado**: 30 minutos até deploy  
+**Status**: ✅ Projeto 100% preparado para Vercel
+**Tempo estimado**: 30 minutos até deploy
 **Data**: Fevereiro 1, 2026
 
 ---
