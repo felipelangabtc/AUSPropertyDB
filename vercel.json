@@ -5,7 +5,8 @@
   "outputDirectory": "apps/web/.next",
   "regions": ["syd1"],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "PNPM_HOME": "/vercel/.pnpm"
   },
   "headers": [
     {
