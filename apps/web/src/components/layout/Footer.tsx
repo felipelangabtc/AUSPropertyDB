@@ -28,7 +28,6 @@ export const Footer: React.FC = () => {
       { label: 'Cookie Policy', href: '#' },
     ],
   };
-
   const socialLinks = [
     { icon: Facebook, href: '#', label: 'Facebook' },
     { icon: Twitter, href: '#', label: 'Twitter' },
@@ -48,8 +47,7 @@ export const Footer: React.FC = () => {
               <span className="text-xl font-bold text-white">AUS Property</span>
             </Link>
             <p className="text-gray-400 mb-4 max-w-xs">
-              Your trusted partner for finding the perfect property in Australia. Powered by AI and
-              real-time market data.
+              Your trusted partner for finding the perfect property in Australia.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social) => (
@@ -64,46 +62,20 @@ export const Footer: React.FC = () => {
               ))}
             </div>
           </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-4">Product</h4>
-            <ul className="space-y-2">
-              {footerLinks.product.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-4">Company</h4>
-            <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-4">Support</h4>
-            <ul className="space-y-2">
-              {footerLinks.support.map((link) => (
-                <li key={link.label}>
-                  <Link href={link.href} className="hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
+          {['Product', 'Company', 'Support'].map((title) => (
+            <div key={title}>
+              <h4 className="text-white font-semibold mb-4">{title}</h4>
+              <ul className="space-y-2">
+                {footerLinks[title.toLowerCase() as keyof typeof footerLinks].map((link) => (
+                  <li key={link.label}>
+                    <Link href={link.href} className="hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-3">
@@ -127,7 +99,6 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
         </div>
-
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">

@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Card, Button, Badge } from '../../src/components/ui';
+import { Card, Button, Badge } from '../../src/components';
 import {
   MapPin,
   Home,

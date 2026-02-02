@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button, Input, Card } from '../../../src/components/ui';
+import { Button, Input, Card } from '../../../src/components';
 import { User, Mail, Lock, ArrowRight, Home, AlertCircle, CheckCircle } from 'lucide-react';
 
 export default function SignupPage() {

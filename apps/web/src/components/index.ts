@@ -5,5 +5,6 @@ export { Badge } from './ui/Badge';
 export { Header } from './layout/Header';
 export { Footer } from './layout/Footer';
 export { SearchBar } from './SearchBar';
+export type { SearchFilters } from './SearchBar';
 export { PropertyCard, PropertyGrid } from './PropertyCard';
 export { AuthForm } from './AuthForm';

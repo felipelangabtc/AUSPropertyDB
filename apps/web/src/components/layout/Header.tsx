@@ -23,7 +23,6 @@ export const Header: React.FC = () => {
             </div>
             <span className="text-xl font-bold text-gray-900 hidden sm:block">AUS Property</span>
           </Link>
-
           <nav className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) => (
               <Link
@@ -35,7 +34,6 @@ export const Header: React.FC = () => {
               </Link>
             ))}
           </nav>
-
           <div className="hidden md:flex items-center space-x-3">
             {isLoggedIn ? (
               <>
@@ -69,7 +67,6 @@ export const Header: React.FC = () => {
               </>
             )}
           </div>
-
           <button
             className="md:hidden p-2 text-gray-600 hover:text-gray-900"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -78,7 +75,6 @@ export const Header: React.FC = () => {
           </button>
         </div>
       </div>
-
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 animate-fade-in">
           <div className="px-4 py-4 space-y-2">
