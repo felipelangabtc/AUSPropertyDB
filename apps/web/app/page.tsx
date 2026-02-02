@@ -12,7 +12,7 @@ import {
   Building2,
   LandPlot,
 } from 'lucide-react';
-import { Button, Card, Badge } from '../../src/components';
+import { Button, Card, Badge } from './components/ui';
 
 export const metadata: Metadata = {
   title: 'AUS Property Intelligence - Find Your Perfect Property',
