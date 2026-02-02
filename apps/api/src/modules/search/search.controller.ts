@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Delete, Body, Param, UseGuards, Req, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { SearchService } from './search.service';
 import { SearchDto, SaveSearchDto } from './dto/search.dto';
 import { JwtGuard } from '../../common/guards/jwt.guard';
@@ -15,6 +15,12 @@ export class SearchController {
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'offset', required: false })
   async search(@Query() dto: SearchDto) {
+    return this.searchService.search(undefined, dto);
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'Search properties with filters' })
+  async searchPost(@Body() dto: SearchDto) {
     return this.searchService.search(undefined, dto);
   }
 

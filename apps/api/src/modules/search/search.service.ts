@@ -10,37 +10,63 @@ export class SearchService {
   constructor(private readonly prisma: PrismaService) {}
 
   async search(userId: string | undefined, dto: SearchDto) {
-    const { query, filters, limit = 20, offset = 0 } = dto;
+    const { query, limit = 20, offset = 0, ...filters } = dto;
 
-    // Full-text search on properties
+    const where: any = {
+      isActive: true,
+    };
+
+    if (query) {
+      where.OR = [
+        { canonicalAddress: { contains: query, mode: 'insensitive' } },
+        { suburb: { contains: query, mode: 'insensitive' } },
+        { state: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+
+    if (filters.minPrice) {
+      where.priceHistory = { ...where.priceHistory, some: { price: { gte: filters.minPrice } } };
+    }
+
+    if (filters.maxPrice) {
+      where.priceHistory = { ...where.priceHistory, some: { price: { lte: filters.maxPrice } } };
+    }
+
+    if (filters.minBeds) {
+      where.bedrooms = { gte: filters.minBeds };
+    }
+
+    if (filters.minBaths) {
+      where.bathrooms = { gte: filters.minBaths };
+    }
+
+    if (filters.type) {
+      where.propertyType = filters.type;
+    }
+
+    let orderBy: any = { convenienceScore: 'desc' };
+    if (filters.sortBy === 'price_asc') {
+      orderBy = { priceHistory: { _min: { price: 'asc' } } };
+    } else if (filters.sortBy === 'price_desc') {
+      orderBy = { priceHistory: { _min: { price: 'desc' } } };
+    } else if (filters.sortBy === 'date_new') {
+      orderBy = { createdAt: 'desc' };
+    } else if (filters.sortBy === 'date_old') {
+      orderBy = { createdAt: 'asc' };
+    }
+
     const properties = await this.prisma.property.findMany({
-      where: {
-        OR: [
-          { canonicalAddress: { contains: query, mode: 'insensitive' } },
-          { suburb: { contains: query, mode: 'insensitive' } },
-          { state: { contains: query, mode: 'insensitive' } },
-        ],
-        isActive: true,
-      },
+      where,
       include: {
         listings: { take: 1, orderBy: { createdAt: 'desc' } },
         priceHistory: { take: 1, orderBy: { capturedAt: 'desc' } },
       },
       skip: offset,
       take: limit,
-      orderBy: { convenienceScore: 'desc' },
+      orderBy,
     });
 
-    const total = await this.prisma.property.count({
-      where: {
-        OR: [
-          { canonicalAddress: { contains: query, mode: 'insensitive' } },
-          { suburb: { contains: query, mode: 'insensitive' } },
-          { state: { contains: query, mode: 'insensitive' } },
-        ],
-        isActive: true,
-      },
-    });
+    const total = await this.prisma.property.count({ where });
 
     this.logger.log(`Search performed: "${query}" - found ${total} results`);
 
