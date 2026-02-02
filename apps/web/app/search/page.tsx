@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { SearchBar, SearchFilters } from './components/SearchBar';
-import { Card, Button, Badge } from './components/ui';
+import { SearchBar, SearchFilters } from '../../src/components/SearchBar';
+import { Card, Button, Badge } from '../../src/components/ui';
 import {
   MapPin,
   Home,

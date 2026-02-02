@@ -12,7 +12,7 @@ export interface SearchFilters {
   minBaths?: number;
   type?: string;
   suburb?: string;
-  radius?: number; // km
+  radius?: number;
   sortBy?: 'price_asc' | 'price_desc' | 'date_new' | 'date_old';
 }
 
@@ -54,7 +54,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div className="w-full bg-white rounded-lg shadow-lg p-4">
-      {/* Main Search Bar */}
       <div className="flex gap-2 mb-4">
         <div className="flex-1 relative">
           <div className="flex items-center bg-gray-100 rounded-lg px-4 py-3">
@@ -71,8 +70,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               className="flex-1 bg-transparent outline-none text-gray-900 placeholder-gray-500"
             />
           </div>
-
-          {/* Suggestions Dropdown */}
           {showSuggestions && suggestions.length > 0 && (
             <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 shadow-lg z-10">
               {suggestions.map((suggestion, index) => (
@@ -88,8 +85,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             </div>
           )}
         </div>
-
-        {/* Filter Button */}
         <button
           onClick={() => setShowFilters(!showFilters)}
           className="bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-3 px-4 rounded-lg flex items-center gap-2 transition-colors"
@@ -97,8 +92,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <Sliders size={20} />
           Filters
         </button>
-
-        {/* Search Button */}
         <button
           onClick={handleSearch}
           disabled={loading}
@@ -107,11 +100,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           {loading ? 'Searching...' : 'Search'}
         </button>
       </div>
-
-      {/* Filters Section */}
       {showFilters && (
         <div className="border-t border-gray-200 pt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {/* Price Range */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Min Price</label>
             <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2">
@@ -130,7 +120,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               />
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Max Price</label>
             <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2">
@@ -149,8 +138,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               />
             </div>
           </div>
-
-          {/* Bedrooms */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Bedrooms</label>
             <select
@@ -168,8 +155,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               <option value="5">5+</option>
             </select>
           </div>
-
-          {/* Bathrooms */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Bathrooms</label>
             <select
@@ -188,8 +173,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               <option value="3">3+</option>
             </select>
           </div>
-
-          {/* Property Type */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Type</label>
             <select
@@ -204,8 +187,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               <option value="land">Land</option>
             </select>
           </div>
-
-          {/* Sort */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Sort By</label>
             <select
@@ -219,8 +200,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               <option value="date_old">Oldest</option>
             </select>
           </div>
-
-          {/* Clear Filters */}
           <div className="flex items-end">
             <button
               onClick={() => {
