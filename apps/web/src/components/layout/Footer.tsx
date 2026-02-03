@@ -99,17 +99,17 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t border-gray-800 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
+        <div className="border-t border-gray-800 mt-12 pt-8 pb-4">
+          <div className="flex flex-wrap gap-y-2 justify-center md:justify-between items-center">
+            <p className="text-gray-400 text-sm order-2 md:order-1">
               &copy; {new Date().getFullYear()} AUS Property Intelligence. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+            <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center text-sm order-1 md:order-2">
               {footerLinks.legal.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="text-gray-400 hover:text-white text-sm transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors"
                 >
                   {link.label}
                 </Link>

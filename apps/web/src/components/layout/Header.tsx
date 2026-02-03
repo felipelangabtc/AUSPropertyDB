@@ -23,29 +23,36 @@ export const Header: React.FC = () => {
             </div>
             <span className="text-xl font-bold text-gray-900 hidden sm:block">AUS Property</span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors font-medium"
+                className="px-4 py-2 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors font-medium whitespace-nowrap"
               >
                 {link.label}
               </Link>
             ))}
           </nav>
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden md:flex items-center gap-4">
             {isLoggedIn ? (
               <>
-                <button className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors">
+                <button
+                  className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                  aria-label="Notifications"
+                >
                   <Bell className="w-5 h-5" />
                 </button>
-                <button className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors">
+                <button
+                  className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                  aria-label="Saved properties"
+                >
                   <Heart className="w-5 h-5" />
                 </button>
                 <Link
                   href="/dashboard"
                   className="p-2 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                  aria-label="Dashboard"
                 >
                   <User className="w-5 h-5" />
                 </Link>
@@ -54,13 +61,13 @@ export const Header: React.FC = () => {
               <>
                 <Link
                   href="/auth/login"
-                  className="px-4 py-2 text-gray-600 hover:text-primary-600 font-medium transition-colors"
+                  className="px-4 py-2 text-gray-600 hover:text-primary-600 font-medium transition-colors whitespace-nowrap"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium transition-colors"
+                  className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium transition-colors whitespace-nowrap"
                 >
                   Get Started
                 </Link>
@@ -68,15 +75,21 @@ export const Header: React.FC = () => {
             )}
           </div>
           <button
-            className="md:hidden p-2 text-gray-600 hover:text-gray-900"
+            className="md:hidden p-2 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 animate-fade-in">
+        <div
+          className="md:hidden bg-white border-t border-gray-100 animate-fade-in"
+          role="navigation"
+          aria-label="Mobile menu"
+        >
           <div className="px-4 py-4 space-y-2">
             {navLinks.map((link) => (
               <Link

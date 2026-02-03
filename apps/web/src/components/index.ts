@@ -8,3 +8,5 @@ export { SearchBar } from './SearchBar';
 export type { SearchFilters } from './SearchBar';
 export { PropertyCard, PropertyGrid } from './PropertyCard';
 export { AuthForm } from './AuthForm';
+export { HeroSearch } from './HeroSearch';
+export { CTASection } from './CTASection';

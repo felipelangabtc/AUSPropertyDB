@@ -1,18 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import {
-  Search,
-  MapPin,
-  TrendingUp,
-  Bell,
-  Shield,
-  Star,
-  ArrowRight,
-  Home,
-  Building2,
-  LandPlot,
-} from 'lucide-react';
-import { Button, Card, Badge } from '../src/components';
+import { Search, TrendingUp, Bell, Shield, Star, Home, Building2, LandPlot } from 'lucide-react';
+import { Button, Card, Badge, HeroSearch, CTASection } from '../src/components';
 
 export const metadata: Metadata = {
   title: 'AUS Property Intelligence - Find Your Perfect Property',
@@ -117,58 +106,12 @@ export default function HomePage() {
               alerts tailored to your needs.
             </p>
 
-            <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-4xl mx-auto">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1 relative">
-                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <input
-                    type="text"
-                    placeholder="Search by suburb, postcode, or address..."
-                    className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-                  />
-                </div>
-                <Link href="/search">
-                  <Button size="lg" className="w-full md:w-auto px-10">
-                    <Search className="w-5 h-5 mr-2" />
-                    Search
-                  </Button>
-                </Link>
-              </div>
-              <div className="flex flex-wrap gap-3 mt-5 justify-center items-center">
-                <span className="text-sm text-gray-500">Popular:</span>
-                <Link
-                  href="/search?q=Sydney"
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium px-3 py-1"
-                >
-                  Sydney
-                </Link>
-                <Link
-                  href="/search?q=Melbourne"
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium px-3 py-1"
-                >
-                  Melbourne
-                </Link>
-                <Link
-                  href="/search?q=Brisbane"
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium px-3 py-1"
-                >
-                  Brisbane
-                </Link>
-                <Link
-                  href="/search?q=Perth"
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium px-3 py-1"
-                >
-                  Perth
-                </Link>
-              </div>
-            </div>
+            <HeroSearch />
           </div>
         </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
       </section>
 
-      <section className="py-24 bg-white">
+      <section className="py-20 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
@@ -185,7 +128,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 bg-gray-50">
+      <section className="py-20 md:py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="section-title">Why Choose AUS Property?</h2>
@@ -212,7 +155,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 bg-white">
+      <section className="py-20 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="section-title">Browse by Property Type</h2>
@@ -242,35 +185,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 bg-primary-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Find Your Dream Property?
-          </h2>
-          <p className="text-xl text-primary-100 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Join thousands of happy users who found their perfect property with AUS Property
-            Intelligence
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/search">
-              <Button size="lg" variant="secondary" className="w-full sm:w-auto px-8">
-                Start Searching
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-            <Link href="/auth/signup">
-              <Button
-                size="lg"
-                className="w-full sm:w-auto bg-white text-primary-600 hover:bg-gray-100 px-8"
-              >
-                Create Free Account
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CTASection secondaryButtonText="Create Free Account" secondaryButtonHref="/auth/signup" />
 
-      <section className="py-24 bg-gray-50">
+      <section className="py-20 md:py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="section-title">What Our Users Say</h2>
@@ -309,7 +226,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 bg-white">
+      <section className="py-20 md:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center">
             <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-3xl p-8 md:p-16 relative overflow-hidden max-w-4xl w-full">
