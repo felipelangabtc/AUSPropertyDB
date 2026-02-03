@@ -170,15 +170,17 @@ export default function HomePage() {
 
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-3">
-                  {stat.value}
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-3">
+                    {stat.value}
+                  </div>
+                  <div className="text-gray-600 font-medium">{stat.label}</div>
                 </div>
-                <div className="text-gray-600 font-medium">{stat.label}</div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -192,18 +194,20 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} hover className="text-center group p-8">
-                <div
-                  className={`w-16 h-16 ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}
-                >
-                  <feature.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-              </Card>
-            ))}
+          <div className="flex justify-center">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl">
+              {features.map((feature, index) => (
+                <Card key={index} hover className="text-center group p-8">
+                  <div
+                    className={`w-16 h-16 ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    <feature.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -217,21 +221,23 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {propertyTypes.map((type, index) => (
-              <Link key={index} href={`/search?type=${type.label.toLowerCase()}`}>
-                <Card hover className="text-center py-10 px-8 group cursor-pointer h-full">
-                  <div
-                    className={`w-20 h-20 bg-gradient-to-br ${type.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}
-                  >
-                    <type.icon className="w-10 h-10 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{type.label}</h3>
-                  <p className="text-3xl font-bold text-primary-600 mb-2">{type.count}</p>
-                  <p className="text-gray-500">properties available</p>
-                </Card>
-              </Link>
-            ))}
+          <div className="flex justify-center">
+            <div className="grid md:grid-cols-3 gap-8 max-w-5xl">
+              {propertyTypes.map((type, index) => (
+                <Link key={index} href={`/search?type=${type.label.toLowerCase()}`}>
+                  <Card hover className="text-center py-10 px-8 group cursor-pointer h-full">
+                    <div
+                      className={`w-20 h-20 bg-gradient-to-br ${type.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}
+                    >
+                      <type.icon className="w-10 h-10 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{type.label}</h3>
+                    <p className="text-3xl font-bold text-primary-600 mb-2">{type.count}</p>
+                    <p className="text-gray-500">properties available</p>
+                  </Card>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -273,54 +279,58 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} padding="lg" className="h-full flex flex-col">
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-gray-600 mb-6 italic leading-relaxed flex-grow">
-                  &quot;{testimonial.content}&quot;
-                </p>
-                <div className="flex items-center mt-auto pt-4">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover mr-4"
-                  />
-                  <div>
-                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+          <div className="flex justify-center">
+            <div className="grid md:grid-cols-3 gap-8 max-w-6xl">
+              {testimonials.map((testimonial, index) => (
+                <Card key={index} padding="lg" className="h-full flex flex-col">
+                  <div className="flex items-center mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                    ))}
                   </div>
-                </div>
-              </Card>
-            ))}
+                  <p className="text-gray-600 mb-6 italic leading-relaxed flex-grow">
+                    &quot;{testimonial.content}&quot;
+                  </p>
+                  <div className="flex items-center mt-auto pt-4">
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full object-cover mr-4"
+                    />
+                    <div>
+                      <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                      <p className="text-sm text-gray-500">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-3xl p-8 md:p-16 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
+          <div className="flex justify-center">
+            <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-3xl p-8 md:p-16 relative overflow-hidden max-w-4xl w-full">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
 
-            <div className="relative z-10 max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-                Get Smart Alerts for Your Dream Property
-              </h2>
-              <p className="text-xl text-primary-100 mb-8 leading-relaxed">
-                Create custom alerts and get notified instantly when properties matching your
-                criteria are listed or when prices drop.
-              </p>
-              <Link href="/auth/signup">
-                <Button size="lg" className="bg-white text-primary-600 hover:bg-gray-100 px-8">
-                  Create Free Alert
-                  <Bell className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
+              <div className="relative z-10 text-center max-w-2xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+                  Get Smart Alerts for Your Dream Property
+                </h2>
+                <p className="text-xl text-primary-100 mb-8 leading-relaxed">
+                  Create custom alerts and get notified instantly when properties matching your
+                  criteria are listed or when prices drop.
+                </p>
+                <Link href="/auth/signup">
+                  <Button size="lg" className="bg-white text-primary-600 hover:bg-gray-100 px-8">
+                    Create Free Alert
+                    <Bell className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
