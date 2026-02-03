@@ -103,21 +103,21 @@ export default function HomePage() {
           </svg>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-40">
           <div className="text-center max-w-4xl mx-auto animate-slide-up">
-            <Badge variant="info" className="mb-6">
+            <Badge variant="info" className="mb-8 px-4 py-2">
               #1 Property Search Platform in Australia
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
               Find Your Perfect
               <span className="block text-yellow-300">Australian Property</span>
             </h1>
-            <p className="text-xl md:text-2xl text-primary-100 mb-10 max-w-2xl mx-auto">
+            <p className="text-xl md:text-2xl text-primary-100 mb-12 max-w-2xl mx-auto leading-relaxed">
               Discover properties with AI-powered search, real-time market insights, and smart
               alerts tailored to your needs.
             </p>
 
-            <div className="bg-white rounded-2xl shadow-2xl p-4 md:p-6 max-w-3xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-4xl mx-auto">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 relative">
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -128,35 +128,35 @@ export default function HomePage() {
                   />
                 </div>
                 <Link href="/search">
-                  <Button size="lg" className="w-full md:w-auto px-8">
+                  <Button size="lg" className="w-full md:w-auto px-10">
                     <Search className="w-5 h-5 mr-2" />
                     Search
                   </Button>
                 </Link>
               </div>
-              <div className="flex flex-wrap gap-2 mt-4 justify-center">
+              <div className="flex flex-wrap gap-3 mt-5 justify-center items-center">
                 <span className="text-sm text-gray-500">Popular:</span>
                 <Link
                   href="/search?q=Sydney"
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium px-3 py-1"
                 >
                   Sydney
                 </Link>
                 <Link
                   href="/search?q=Melbourne"
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium px-3 py-1"
                 >
                   Melbourne
                 </Link>
                 <Link
                   href="/search?q=Brisbane"
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium px-3 py-1"
                 >
                   Brisbane
                 </Link>
                 <Link
                   href="/search?q=Perth"
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium px-3 py-1"
                 >
                   Perth
                 </Link>
@@ -168,22 +168,22 @@ export default function HomePage() {
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
       </section>
 
-      <section className="py-16 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary-600 mb-2">
+                <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-3">
                   {stat.value}
                 </div>
-                <div className="text-gray-600">{stat.label}</div>
+                <div className="text-gray-600 font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="section-title">Why Choose AUS Property?</h2>
@@ -194,21 +194,21 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} hover className="text-center group">
+              <Card key={index} hover className="text-center group p-8">
                 <div
                   className={`w-16 h-16 ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`}
                 >
                   <feature.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="section-title">Browse by Property Type</h2>
@@ -220,7 +220,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-8">
             {propertyTypes.map((type, index) => (
               <Link key={index} href={`/search?type=${type.label.toLowerCase()}`}>
-                <Card hover className="text-center py-8 group cursor-pointer">
+                <Card hover className="text-center py-10 px-8 group cursor-pointer h-full">
                   <div
                     className={`w-20 h-20 bg-gradient-to-br ${type.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}
                   >
@@ -236,18 +236,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-primary-600 text-white">
+      <section className="py-24 bg-primary-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Ready to Find Your Dream Property?
           </h2>
-          <p className="text-xl text-primary-100 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl text-primary-100 mb-10 max-w-2xl mx-auto leading-relaxed">
             Join thousands of happy users who found their perfect property with AUS Property
             Intelligence
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/search">
-              <Button size="lg" variant="secondary" className="w-full sm:w-auto">
+              <Button size="lg" variant="secondary" className="w-full sm:w-auto px-8">
                 Start Searching
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
@@ -255,7 +255,7 @@ export default function HomePage() {
             <Link href="/auth/signup">
               <Button
                 size="lg"
-                className="w-full sm:w-auto bg-white text-primary-600 hover:bg-gray-100"
+                className="w-full sm:w-auto bg-white text-primary-600 hover:bg-gray-100 px-8"
               >
                 Create Free Account
               </Button>
@@ -264,7 +264,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="section-title">What Our Users Say</h2>
@@ -275,14 +275,16 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} padding="lg">
+              <Card key={index} padding="lg" className="h-full flex flex-col">
                 <div className="flex items-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                   ))}
                 </div>
-                <p className="text-gray-600 mb-6 italic">&quot;{testimonial.content}&quot;</p>
-                <div className="flex items-center">
+                <p className="text-gray-600 mb-6 italic leading-relaxed flex-grow">
+                  &quot;{testimonial.content}&quot;
+                </p>
+                <div className="flex items-center mt-auto pt-4">
                   <img
                     src={testimonial.image}
                     alt={testimonial.name}
@@ -299,22 +301,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+          <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-3xl p-8 md:p-16 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
 
             <div className="relative z-10 max-w-3xl">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
                 Get Smart Alerts for Your Dream Property
               </h2>
-              <p className="text-xl text-primary-100 mb-8">
+              <p className="text-xl text-primary-100 mb-8 leading-relaxed">
                 Create custom alerts and get notified instantly when properties matching your
                 criteria are listed or when prices drop.
               </p>
               <Link href="/auth/signup">
-                <Button size="lg" className="bg-white text-primary-600 hover:bg-gray-100">
+                <Button size="lg" className="bg-white text-primary-600 hover:bg-gray-100 px-8">
                   Create Free Alert
                   <Bell className="w-5 h-5 ml-2" />
                 </Button>
