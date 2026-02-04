@@ -82,7 +82,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen w-full">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white overflow-hidden">
+      <section className="relative w-full bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black/10" />
         <div className="absolute inset-0 opacity-10">
           <svg viewBox="0 0 200 200" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
@@ -95,8 +95,8 @@ export default function HomePage() {
         <div className="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-primary-400/10 rounded-full blur-3xl" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 md:py-32 lg:py-40">
-          <div className="text-center max-w-4xl mx-auto animate-slide-up">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 md:py-32 lg:py-40">
+          <div className="text-center w-full max-w-4xl mx-auto animate-slide-up">
             <Badge variant="info" className="mb-6 sm:mb-8 px-4 py-2 text-sm">
               #1 Property Search Platform in Australia
             </Badge>
@@ -115,8 +115,8 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 sm:py-20 md:py-24 bg-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="w-full py-16 sm:py-20 md:py-24 bg-white">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-12">
             {stats.map((stat, index) => (
               <div
@@ -134,8 +134,8 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 sm:py-20 md:py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="w-full py-16 sm:py-20 md:py-24 bg-gray-50">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
             <h2 className="section-title">Why Choose AUS Property?</h2>
             <p className="section-subtitle mx-auto">
@@ -160,8 +160,8 @@ export default function HomePage() {
       </section>
 
       {/* Property Types Section */}
-      <section className="py-16 sm:py-20 md:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="w-full py-16 sm:py-20 md:py-24 bg-white">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
             <h2 className="section-title">Browse by Property Type</h2>
             <p className="section-subtitle mx-auto">
@@ -191,8 +191,8 @@ export default function HomePage() {
       <CTASection secondaryButtonText="Create Free Account" secondaryButtonHref="/auth/signup" />
 
       {/* Testimonials Section */}
-      <section className="py-16 sm:py-20 md:py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="w-full py-16 sm:py-20 md:py-24 bg-gray-50">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12 md:mb-16">
             <h2 className="section-title">What Our Users Say</h2>
             <p className="section-subtitle mx-auto">
@@ -229,13 +229,13 @@ export default function HomePage() {
       </section>
 
       {/* Smart Alerts CTA Section */}
-      <section className="py-16 sm:py-20 md:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="w-full py-16 sm:py-20 md:py-24 bg-white">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-16 relative overflow-hidden max-w-4xl mx-auto">
             <div className="absolute top-0 right-0 w-40 sm:w-64 h-40 sm:h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-32 sm:w-48 h-32 sm:h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
 
-            <div className="relative z-10 text-center max-w-2xl mx-auto">
+            <div className="relative z-10 text-center w-full max-w-2xl mx-auto">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-white leading-tight">
                 Get Smart Alerts for Your Dream Property
               </h2>
