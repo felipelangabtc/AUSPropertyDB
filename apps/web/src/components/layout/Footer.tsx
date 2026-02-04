@@ -37,19 +37,20 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="bg-gray-900 text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
-          <div className="col-span-2">
-            <Link href="/" className="flex items-center space-x-2 mb-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-6">
+          {/* Brand Section */}
+          <div className="sm:col-span-2">
+            <Link href="/" className="inline-flex items-center space-x-2 mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
                 <Home className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold text-white">AUS Property</span>
             </Link>
-            <p className="text-gray-400 mb-4 max-w-xs">
+            <p className="text-gray-400 mb-4 max-w-xs text-sm sm:text-base">
               Your trusted partner for finding the perfect property in Australia.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
@@ -62,13 +63,15 @@ export const Footer: React.FC = () => {
               ))}
             </div>
           </div>
+
+          {/* Link Sections */}
           {['Product', 'Company', 'Support'].map((title) => (
             <div key={title}>
-              <h4 className="text-white font-semibold mb-4">{title}</h4>
+              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm uppercase tracking-wider">{title}</h4>
               <ul className="space-y-2">
                 {footerLinks[title.toLowerCase() as keyof typeof footerLinks].map((link) => (
                   <li key={link.label}>
-                    <Link href={link.href} className="hover:text-white transition-colors">
+                    <Link href={link.href} className="text-sm hover:text-white transition-colors">
                       {link.label}
                     </Link>
                   </li>
@@ -76,35 +79,39 @@ export const Footer: React.FC = () => {
               </ul>
             </div>
           ))}
+
+          {/* Contact Section */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Contact</h4>
+            <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm uppercase tracking-wider">Contact</h4>
             <ul className="space-y-3">
-              <li className="flex items-center space-x-2">
-                <MapPin className="w-5 h-5 text-primary-500" />
-                <span>Sydney, Australia</span>
+              <li className="flex items-start space-x-2">
+                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-primary-500 flex-shrink-0 mt-0.5" />
+                <span className="text-sm">Sydney, Australia</span>
               </li>
-              <li className="flex items-center space-x-2">
-                <Mail className="w-5 h-5 text-primary-500" />
+              <li className="flex items-start space-x-2">
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-primary-500 flex-shrink-0 mt-0.5" />
                 <a
                   href="mailto:hello@ausproperty.com"
-                  className="hover:text-white transition-colors"
+                  className="text-sm hover:text-white transition-colors break-all"
                 >
                   hello@ausproperty.com
                 </a>
               </li>
-              <li className="flex items-center space-x-2">
-                <Phone className="w-5 h-5 text-primary-500" />
-                <span>+61 2 1234 5678</span>
+              <li className="flex items-start space-x-2">
+                <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-primary-500 flex-shrink-0 mt-0.5" />
+                <span className="text-sm">+61 2 1234 5678</span>
               </li>
             </ul>
           </div>
         </div>
-        <div className="border-t border-gray-800 mt-12 pt-8 pb-4">
-          <div className="flex flex-wrap gap-y-2 justify-center md:justify-between items-center">
-            <p className="text-gray-400 text-sm order-2 md:order-1">
+
+        {/* Bottom Section */}
+        <div className="border-t border-gray-800 mt-10 sm:mt-12 pt-6 sm:pt-8">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-2 justify-center sm:justify-between items-center">
+            <p className="text-gray-400 text-xs sm:text-sm order-2 sm:order-1 text-center sm:text-left">
               &copy; {new Date().getFullYear()} AUS Property Intelligence. All rights reserved.
             </p>
-            <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center text-sm order-1 md:order-2">
+            <div className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-2 justify-center text-xs sm:text-sm order-1 sm:order-2">
               {footerLinks.legal.map((link) => (
                 <Link
                   key={link.label}
